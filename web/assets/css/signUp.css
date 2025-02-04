@@ -1,0 +1,117 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Feb 4, 2025, 2:45:29 PM
+    Author     : PC
+*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f4f6;
+}
+
+.min-h-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+.text-white {
+    color: white;
+}
+
+.bg-red-400 {
+    background-color: #f87171;
+}
+
+.rounded-sm {
+    border-radius: 5px;
+}
+
+.p-1 {
+    padding: 8px;
+}
+
+.form-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #374151;
+}
+
+.form-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.form-input {
+    width: 375px;
+    padding: 10px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #374151;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 4px #3b82f6;
+}
+
+.submit-button {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submit-button:hover {
+    background: #1e40af;
+}
+
+.form-footer {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 10px;
+}
+
+.form-link {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.form-link:hover {
+    text-decoration: underline;
+}
+
+
