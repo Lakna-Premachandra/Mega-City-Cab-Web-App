@@ -8,9 +8,240 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <title>Mega City Cab</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./assets/css/index.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div>Test 01</div>
-        <a href="./views/auth-layout/sign-in/signIn.jsp">Sign In</a>
+        <section id="header">
+            <a href="#"  class="logo"><img width="60" src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" class="logo" alt=""> </a>
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="index.html">Home</a></li>
+                    <!--<li><a href="shop.html">Shop</a></li>-->
+                    <li><a href="blog.html">Help</a></li>
+                    <li><a href="./views/auth-layout/sign-in/signIn.jsp">Sign in</a></li>
+                    <button id="booknow"><a class='booknow' href="contact.html">Boo now</a></button>
+
+                    <li id="lg-bag"><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+                    <a href="#" id="close"><i class="far fa-times"></i></a>
+                </ul>
+            </div>
+
+        </section>
+
+        <div class="background">
+            <div class="backgrond-section">
+
+                <h1 class   ='heading'>MEGA CITY CAB</h1>
+                <div class="paragraph">
+                    asdkjasldkhadlshakjsdhkaslkashjgdlagdkjhagsdkjahsdgjahsgdjahsdglhasgdas
+                    asdkjasldkhadlshakjsdhkaslkashjgdlagdkj asdkjasldkhadlshakj
+                </div>
+                <div>
+                    <button class="btn btn-1">
+                        Get in touch
+                    </button>
+                    <button class="btn btn-2">
+                        Book now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form">
+            <h2>MAKE A BOOKING NOW!!</h2>
+            <div class="inputs">
+
+                <div>
+                    <input id="name" placeholder="name"/>
+                    <span id="nameError" class="error-message"></span>
+
+                </div>
+
+                <div >
+                    <input type="date" id="date" placeholder="date"/>
+                    <span id="dateError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="inputs">
+
+                <div>
+                    <input id="pickup" placeholder="pick up location"/>
+                    <span id="pickupError" class="error-message"></span>
+                </div>
+
+
+                <div >
+                    <input id="drop" placeholder="drop location"/>
+                    <span id="dropError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="inputs">
+                <div>
+                    <input id="mobile" placeholder="mobile number" />
+                    <span id="mobileError" class="error-message"></span>
+                </div>
+
+
+                <div >
+                    <input id="address" placeholder="address"/>
+                    <span id="addressError" class="error-message"></span>
+                </div>
+            </div>
+
+            <button class="btn-new" onclick="validateForm()">Book now</button>
+        </div>
+
+        <footer class="section-p1">
+            <div class="col logo">
+                <img src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif"alt="">
+                <h4>Contact</h4>
+                <p><strong>Address:</strong> Lahore, Pakistan - 54840</p>
+                <p><strong>Phone:</strong> +92-321-4655990</p>
+                <p><strong>Hours:</strong> 10:00 - 18:00, Mon - Sat</p>
+                <div class="follow">
+                    <h4>Follow us</h4>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-pinterest-p"></i>
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <h4>About</h4>
+                <a href="#">About us</a>
+                <a href="#">Delivery Information</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="col">
+                <h4>My Account</h4>
+                <a href="#">Sign In</a>
+                <a href="#">View Cart</a>
+                <a href="#">My Wishlist</a>
+                <a href="#">Track My Order</a>
+                <a href="#">Help</a>
+            </div>
+            <div class="col install">
+                <h4>Install App</h4>
+                <p>From App Store or Google Play</p>
+<!--                <div class="row">
+                    <img src="images/pay/app.jpg" alt="">
+                    <img src="images/pay/play.jpg" alt="">
+                </div>-->
+                <p>Secured Payment Gateway</p>
+                <img src="images/pay/pay.png" alt="">
+            </div>
+            <div class="copyright">
+                <p>Created By | All Rights Reserved | &#169; 2025</p>
+            </div>
+        </footer>
+
+
+        <script>
+            function validateForm() {
+                // Get all input fields
+                const name = document.getElementById('name');
+                const date = document.getElementById('date');
+                const pickup = document.getElementById('pickup');
+                const drop = document.getElementById('drop');
+                const mobile = document.getElementById('mobile');
+                const address = document.getElementById('address');
+
+                // Get all error message elements
+                const nameError = document.getElementById('nameError');
+                const dateError = document.getElementById('dateError');
+                const pickupError = document.getElementById('pickupError');
+                const dropError = document.getElementById('dropError');
+                const mobileError = document.getElementById('mobileError');
+                const addressError = document.getElementById('addressError');
+
+                // Reset all error messages
+                nameError.style.display = 'none';
+                dateError.style.display = 'none';
+                pickupError.style.display = 'none';
+                dropError.style.display = 'none';
+                mobileError.style.display = 'none';
+                addressError.style.display = 'none';
+
+                // Validate each field
+                let isValid = true;
+
+                if (name.value.trim() === '') {
+                    nameError.textContent = 'Name is required';
+                    nameError.style.display = 'block';
+                    isValid = false;
+                }
+
+                if (date.value.trim() === '') {
+                    dateError.textContent = 'Date is required';
+                    dateError.style.display = 'block';
+                    isValid = false;
+                }
+
+                if (pickup.value.trim() === '') {
+                    pickupError.textContent = 'Pick up location is required';
+                    pickupError.style.display = 'block';
+                    isValid = false;
+                }
+
+                if (drop.value.trim() === '') {
+                    dropError.textContent = 'Drop location is required';
+                    dropError.style.display = 'block';
+                    isValid = false;
+                }
+
+                if (mobile.value.trim() === '') {
+                    mobileError.textContent = 'Mobile number is required';
+                    mobileError.style.display = 'block';
+                    isValid = false;
+                }
+
+                if (address.value.trim() === '') {
+                    addressError.textContent = 'Address is required';
+                    addressError.style.display = 'block';
+                    isValid = false;
+                }
+
+                // If all fields are valid, you can proceed with the booking
+                if (isValid) {
+                    alert('Booking successful!');
+                    // You can add your booking logic here
+                }
+            }
+
+            // Add event listeners to clear validation messages when typing
+            document.getElementById('name').addEventListener('input', function () {
+                document.getElementById('nameError').style.display = 'none';
+            });
+
+            document.getElementById('date').addEventListener('input', function () {
+                document.getElementById('dateError').style.display = 'none';
+            });
+
+            document.getElementById('pickup').addEventListener('input', function () {
+                document.getElementById('pickupError').style.display = 'none';
+            });
+
+            document.getElementById('drop').addEventListener('input', function () {
+                document.getElementById('dropError').style.display = 'none';
+            });
+
+            document.getElementById('mobile').addEventListener('input', function () {
+                document.getElementById('mobileError').style.display = 'none';
+            });
+
+            document.getElementById('address').addEventListener('input', function () {
+                document.getElementById('addressError').style.display = 'none';
+            });
+        </script>
     </body>
 </html>
