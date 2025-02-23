@@ -4,22 +4,22 @@
  */
 package DAO;
 
-/**
- *
- * @author PC
- */
-import Models.Customer;
+import Models.DriverDetails;
+import Models.UserLoginDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Models.UserLoginDetails;
+/**
+ *
+ * @author PC
+ */
 
-public class CustomerDAO {
-    public boolean registerCustomer(Customer customer, UserLoginDetails userLogin) throws ClassNotFoundException {
+public class DriverDAO {
+    public boolean registerDriver(DriverDetails driver, UserLoginDetails userLogin) throws ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pstmtUser = null;
-        PreparedStatement pstmtCustomer = null;
+        PreparedStatement pstmtDriver = null;
         ResultSet rs = null;
         boolean isRegistered = false;
 
@@ -27,6 +27,7 @@ public class CustomerDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
+            // Insert into user_details
             String sqlUser = "INSERT INTO user_details (username, password, userType) VALUES (?, ?, ?)";
             pstmtUser = conn.prepareStatement(sqlUser, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmtUser.setString(1, userLogin.getUsername());
@@ -40,34 +41,36 @@ public class CustomerDAO {
                 userID = rs.getInt(1);
             }
 
-            String sqlCustomer = "INSERT INTO customer_details (userID, customerName, address, phoneNo, email, NIC) VALUES (?, ?, ?, ?, ?, ?)";
-            pstmtCustomer = conn.prepareStatement(sqlCustomer);
-            pstmtCustomer.setInt(1, userID);
-            pstmtCustomer.setString(2, customer.getCustomerName());
-            pstmtCustomer.setString(3, customer.getAddress());
-            pstmtCustomer.setString(4, customer.getPhoneNo());
-            pstmtCustomer.setString(5, customer.getEmail());
-            pstmtCustomer.setString(6, customer.getNic());
-            pstmtCustomer.executeUpdate();
+            // Insert into drivers
+            String sqlDriver = "INSERT INTO driver_details (userID, driverName, phoneNo, email, license_number, carID) VALUES (?, ?, ?, ?, ?, ?)";
+            pstmtDriver = conn.prepareStatement(sqlDriver);
+            pstmtDriver.setInt(1, userID);
+            pstmtDriver.setString(2, driver.getDriverName());
+            pstmtDriver.setString(3, driver.getPhoneNo());
+            pstmtDriver.setString(4, driver.getEmail());
+            pstmtDriver.setString(5, driver.getLicenseNumber());
+            pstmtDriver.setInt(6, driver.getCarID());
 
-            conn.commit(); 
-            isRegistered = true;
+            int rowsInserted = pstmtDriver.executeUpdate();
+            if (rowsInserted > 0) {
+                isRegistered = true;
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
 
         } catch (SQLException e) {
-            System.out.println("CustomerDAO: Error in registerCustomer()");
             e.printStackTrace();
-            if (conn != null) {
-                try {
-                    conn.rollback(); 
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (pstmtUser != null) pstmtUser.close();
-                if (pstmtCustomer != null) pstmtCustomer.close();
+                if (pstmtDriver != null) pstmtDriver.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();

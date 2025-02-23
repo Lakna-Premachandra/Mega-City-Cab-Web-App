@@ -10,30 +10,22 @@ package Models;
  */
 public class Customer {
     private int customerID;
-    private int userID;
     private String customerName;
     private String address;
     private String phoneNo;
     private String email;
     private String nic;
-    private String username;
-    private String password;
 
-    public Customer(String customerName, String address, String phoneNo, String email, String ni, String username, String password) {
+    public Customer(String customerName, String address, String phoneNo, String email, String nic) {
         this.customerName = customerName;
         this.address = address;
         this.phoneNo = phoneNo;
         this.email = email;
         this.nic = nic;
-        this.username = username;
-        this.password = password;
     }
 
     public int getCustomerID() { return customerID; }
     public void setCustomerID(int customerID) { this.customerID = customerID; }
-
-    public int getUserID() { return userID; }
-    public void setUserID(int userID) { this.userID = userID; }
 
     public String getCustomerName() { return customerName; }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
@@ -49,11 +41,5 @@ public class Customer {
 
     public String getNic() { return nic; }
     public void setNic(String nic) { this.nic = nic; }
-
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
 }
 

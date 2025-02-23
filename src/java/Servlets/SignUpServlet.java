@@ -14,6 +14,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import Models.UserLoginDetails;
+import Models.VehicleDetails;
+import DAO.VehicleDAO;
+import Models.DriverDetails;
+import DAO.DriverDAO;
 /**
  *
  * @author PC
@@ -31,11 +36,12 @@ public class SignUpServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String customerName = request.getParameter("customername");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
-        String email = request.getParameter("email");
-        String nic = request.getParameter("nic");
+//        String customerName = request.getParameter("customername");
+//        String phoneNumber = request.getParameter("phoneNumber");
+//        String address = request.getParameter("address");
+//        String email = request.getParameter("email");
+//        String nic = request.getParameter("nic");
+        String userType = request.getParameter("userType");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
@@ -45,14 +51,54 @@ public class SignUpServlet extends HttpServlet {
             request.getRequestDispatcher("/views/auth-layout/sign-up/signUp.jsp").forward(request, response);
             return;
         }
+        
+//        if (role == null || role.trim().isEmpty()) {
+//        role = "Customer"; 
+//        }
 
         String hashedPassword = hashPassword(password);
 
-        Customer customer = new Customer(customerName, address, phoneNumber, email, nic, username, hashedPassword);
+//        Customer customer = new Customer(customerName, address, phoneNumber, email, nic);
+        UserLoginDetails userLogin = new UserLoginDetails(username, hashedPassword, userType);
+        
+        boolean isRegistered = false;
 
         try {
-            CustomerDAO customerDAO = new CustomerDAO();
-            boolean isRegistered = customerDAO.registerCustomer(customer);
+//            CustomerDAO customerDAO = new CustomerDAO();
+//            boolean isRegistered = customerDAO.registerCustomer(customer, userLogin);
+
+             if ("driver".equalsIgnoreCase(userType)) {
+                // Driver registration
+                String driverName = request.getParameter("driverName");
+                String phoneNo = request.getParameter("phoneNo");
+                String email = request.getParameter("email");
+                String licenseNumber = request.getParameter("license_number");
+
+                // Vehicle details
+                String carModel = request.getParameter("model");
+                int carYear = Integer.parseInt(request.getParameter("year"));
+                String plateNumber = request.getParameter("plate_number");
+
+                VehicleDetails vehicle = new VehicleDetails(carModel, carYear, plateNumber);
+                VehicleDAO vehicleDAO = new VehicleDAO();
+                int carID = vehicleDAO.insertCar(vehicle);
+
+                DriverDetails driver = new DriverDetails(driverName, phoneNo, email, licenseNumber, carID);
+                DriverDAO driverDAO = new DriverDAO();
+                isRegistered = driverDAO.registerDriver(driver, userLogin);
+
+            } else {
+                // Customer registration
+                String customerName = request.getParameter("customerName");
+                String phoneNumber = request.getParameter("phoneNumber");
+                String address = request.getParameter("address");
+                String email = request.getParameter("email");
+                String nic = request.getParameter("nic");
+
+                Customer customer = new Customer(customerName, address, phoneNumber, email, nic);
+                CustomerDAO customerDAO = new CustomerDAO();
+                isRegistered = customerDAO.registerCustomer(customer, userLogin);
+            }
 
             if (isRegistered) {
                 response.sendRedirect(request.getContextPath() + "/views/auth-layout/sign-in/signIn.jsp");
