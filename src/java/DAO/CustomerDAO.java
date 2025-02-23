@@ -13,10 +13,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Models.UserLoginDetails;
 
 public class CustomerDAO {
-    public boolean registerCustomer(Customer customer, UserLoginDetails userLogin) throws ClassNotFoundException {
+    public boolean registerCustomer(Customer customer) throws ClassNotFoundException {
         Connection conn = null;
         PreparedStatement pstmtUser = null;
         PreparedStatement pstmtCustomer = null;
@@ -27,11 +26,10 @@ public class CustomerDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
-            String sqlUser = "INSERT INTO user_details (username, password, userType) VALUES (?, ?, ?)";
+            String sqlUser = "INSERT INTO user_details (username, password, userType) VALUES (?, ?, 'Customer')";
             pstmtUser = conn.prepareStatement(sqlUser, PreparedStatement.RETURN_GENERATED_KEYS);
-            pstmtUser.setString(1, userLogin.getUsername());
-            pstmtUser.setString(2, userLogin.getPassword());
-            pstmtUser.setString(3, userLogin.getUserType());
+            pstmtUser.setString(1, customer.getUsername());
+            pstmtUser.setString(2, customer.getPassword()); // Hash password before passing
             pstmtUser.executeUpdate();
 
             rs = pstmtUser.getGeneratedKeys();
