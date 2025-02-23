@@ -5,16 +5,16 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sign Up Page</title>
-        <link rel="stylesheet" href="../../../assets/css/signUp.css"/>
+        <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/css/signUp.css"/>   
     </head>
     <body>
         <div class="min-h-screen flex justify-center items-center bg-gray-100">
-        <form class="form-container">
+        <form action="<%= request.getContextPath() %>/SignUpServlet" method="POST" class="form-container">
             <div id="errorMessage" class="hidden text-white text-center bg-red-400 rounded-sm p-1">
                 Fields are required
             </div>
@@ -24,9 +24,9 @@
             </p>
 
             <input
-                name="username"
+                name="customername"
                 type="text"
-                placeholder="Username"
+                placeholder="Customer Name"
                 class="form-input"
             />
             <input
@@ -45,6 +45,18 @@
                 name="email"
                 type="email"
                 placeholder="Email"
+                class="form-input"
+            />
+            <input
+                name="nic"
+                type="text"
+                placeholder="NIC"
+                class="form-input"
+            />
+            <input
+                name="username"
+                type="text"
+                placeholder="Username"
                 class="form-input"
             />
             <input
@@ -72,6 +84,11 @@
                 <a href="../sign-in/signIn.jsp" class="form-link">Sign In</a>
             </p>
         </form>
+            <% String error = (String) request.getAttribute("error"); %>
+            <% if (error != null) { %>
+                <div style="color: red;"><%= error %></div>
+            <% } %>
+
     </div>
     </body>
 </html>

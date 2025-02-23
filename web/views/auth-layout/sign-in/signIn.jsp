@@ -40,6 +40,9 @@
             <p class="form-footer">
                 Create an account? <a href="../sign-up/signUp.jsp" class="form-link">Sign Up</a>
             </p>
+            <p class="form-footer">
+                Want to join as a driver? <a href="../sign-up/signUp.jsp" class="form-link">Join US</a>
+            </p>
         </form>
     </div>
 
