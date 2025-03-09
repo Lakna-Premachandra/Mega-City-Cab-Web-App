@@ -260,7 +260,6 @@
         <div class="main-container">
             <div class="image-container">
                 <div class="logo">Megacity Cab</div>
-                <!-- Replace with your actual image -->
             </div>
 
             <div class="form-container">
@@ -272,10 +271,10 @@
 
                     <div id="errorMessage" class="error-message"></div>
 
-                    <form id="signinForm">
+                    <form id="signinForm" action="<%= request.getContextPath()%>/SignInServlet" method="post">
                         <div class="form-group">
-                            <label for="username" class="form-label">Email</label>
-                            <input type="text" id="username" name="username" placeholder="Enter your email" class="form-input">
+                            <label for="username" class="form-label">username</label>
+                            <input type="text" id="username" name="username" placeholder="Enter your username" class="form-input">
                         </div>
 
                         <div class="form-group">
@@ -292,7 +291,8 @@
                             <a href="#" class="forgot-password">Reset password</a>
                         </div>
 
-                        <button type="submit" class="submit-button">Sign In</button>
+                           <!--<input type="submit" class="submit-button"value="submit"/>-->
+                            <button type="submit" class="submit-button">Sign In</button>
 
                         <div class="divider">or</div>
 
@@ -327,7 +327,6 @@
             }
 
             document.getElementById('signinForm').addEventListener('submit', function (event) {
-                event.preventDefault();
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 const errorMessage = document.getElementById('errorMessage');

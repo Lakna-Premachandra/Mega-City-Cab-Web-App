@@ -13,64 +13,172 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class CustomerDAO {
-    public boolean registerCustomer(Customer customer) throws ClassNotFoundException {
+    
+    // Add a new customer
+    public int addCustomer(Customer customer) throws SQLException, ClassNotFoundException {
         Connection conn = null;
-        PreparedStatement pstmtUser = null;
-        PreparedStatement pstmtCustomer = null;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
-        boolean isRegistered = false;
-
+        int customerId = -1;
+        
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false);
-
-            String sqlUser = "INSERT INTO user_details (username, password, userType) VALUES (?, ?, 'Customer')";
-            pstmtUser = conn.prepareStatement(sqlUser, PreparedStatement.RETURN_GENERATED_KEYS);
-            pstmtUser.setString(1, customer.getUsername());
-            pstmtUser.setString(2, customer.getPassword()); // Hash password before passing
-            pstmtUser.executeUpdate();
-
-            rs = pstmtUser.getGeneratedKeys();
-            int userID = 0;
+            
+            // Use prepared statement to prevent SQL injection
+            String sql = "INSERT INTO customer_details (userID, customerName, address, phoneNo, email, NIC) VALUES (?, ?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            
+            stmt.setInt(1, customer.getUserId());
+            stmt.setString(2, customer.getCustomerName());
+            stmt.setString(3, customer.getAddress());
+            stmt.setString(4, customer.getPhoneNo());
+            stmt.setString(5, customer.getEmail());
+            stmt.setString(6, customer.getNIC());
+            
+            int affectedRows = stmt.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Creating customer failed, no rows affected.");
+            }
+            
+            // Get the auto-generated customerId
+            rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                userID = rs.getInt(1);
+                customerId = rs.getInt(1);
+                customer.setCustomerId(customerId);
+            } else {
+                throw new SQLException("Creating customer failed, no ID obtained.");
             }
-
-            String sqlCustomer = "INSERT INTO customer_details (userID, customerName, address, phoneNo, email, NIC) VALUES (?, ?, ?, ?, ?, ?)";
-            pstmtCustomer = conn.prepareStatement(sqlCustomer);
-            pstmtCustomer.setInt(1, userID);
-            pstmtCustomer.setString(2, customer.getCustomerName());
-            pstmtCustomer.setString(3, customer.getAddress());
-            pstmtCustomer.setString(4, customer.getPhoneNo());
-            pstmtCustomer.setString(5, customer.getEmail());
-            pstmtCustomer.setString(6, customer.getNic());
-            pstmtCustomer.executeUpdate();
-
-            conn.commit(); 
-            isRegistered = true;
-
-        } catch (SQLException e) {
-            System.out.println("CustomerDAO: Error in registerCustomer()");
-            e.printStackTrace();
-            if (conn != null) {
-                try {
-                    conn.rollback(); 
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmtUser != null) pstmtUser.close();
-                if (pstmtCustomer != null) pstmtCustomer.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            // Close resources
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
         }
-        return isRegistered;
+        
+        return customerId;
+    }
+    
+    // Get customer by user ID
+    public Customer getCustomerByUserId(int userId) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Customer customer = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            
+            String sql = "SELECT * FROM customer_details WHERE userID = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setCustomerId(rs.getInt("customerID"));
+                customer.setUserId(rs.getInt("userID"));
+                customer.setCustomerName(rs.getString("customerName"));
+                customer.setAddress(rs.getString("address"));
+                customer.setPhoneNo(rs.getString("phoneNo"));
+                customer.setEmail(rs.getString("email"));
+                customer.setNIC(rs.getString("NIC"));
+            }
+            
+        } finally {
+            // Close resources
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+        }
+        
+        return customer;
+    }
+    
+    // Get customer by ID
+    public Customer getCustomerById(int customerId) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Customer customer = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            
+            String sql = "SELECT * FROM customer_details WHERE customerID = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, customerId);
+            
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setCustomerId(rs.getInt("customerID"));
+                customer.setUserId(rs.getInt("userID"));
+                customer.setCustomerName(rs.getString("customerName"));
+                customer.setAddress(rs.getString("address"));
+                customer.setPhoneNo(rs.getString("phoneNo"));
+                customer.setEmail(rs.getString("email"));
+                customer.setNIC(rs.getString("NIC"));
+            }
+            
+        } finally {
+            // Close resources
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+        }
+        
+        return customer;
+    }
+    
+    // Update customer information
+    public boolean updateCustomer(Customer customer) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            
+            String sql = "UPDATE customer_details SET customerName = ?, address = ?, phoneNo = ?, email = ?, NIC = ? WHERE customerID = ?";
+            stmt = conn.prepareStatement(sql);
+            
+            stmt.setString(1, customer.getCustomerName());
+            stmt.setString(2, customer.getAddress());
+            stmt.setString(3, customer.getPhoneNo());
+            stmt.setString(4, customer.getEmail());
+            stmt.setString(5, customer.getNIC());
+            stmt.setInt(6, customer.getCustomerId());
+            
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+            
+        } finally {
+            // Close resources
+            if (stmt != null) stmt.close();
+        }
+    }
+    
+    // Delete customer
+    public boolean deleteCustomer(int customerId) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            
+            String sql = "DELETE FROM customer_details WHERE customerID = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, customerId);
+            
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+            
+        } finally {
+            // Close resources
+            if (stmt != null) stmt.close();
+        }
     }
 }
