@@ -1,164 +1,720 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
 <html>
     <head>
-        <title>Mega City Cab</title>
+        <title>Mega City Cab - Book Now</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./assets/css/index.css"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: 'Lato', sans-serif;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                color: #333;
+                background-color: #f5f5f5;
+            }
+
+            /* Header Styles */
+            #header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px 40px;
+                background-color: #ffffff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+
+            .logo {
+                height: 60px;
+                width: auto;
+            }
+
+            #navbar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                list-style: none;
+            }
+
+            #navbar li {
+                padding: 0 20px;
+                position: relative;
+            }
+
+            #navbar li a {
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 600;
+                color: #333;
+                transition: 0.3s ease;
+            }
+
+            #navbar li a:hover,
+            #navbar li a.active {
+                color: #2563eb;
+            }
+
+            #navbar li a.active::after,
+            #navbar li a:hover::after {
+                content: "";
+                width: 30%;
+                height: 2px;
+                background: #2563eb;
+                position: absolute;
+                bottom: -4px;
+                left: 20px;
+            }
+
+            #booknow {
+                background-color: #2563eb;
+                padding: 10px 20px;
+                border-radius: 4px;
+                border: none;
+                margin-left: 20px;
+                cursor: pointer;
+                transition: 0.3s ease;
+            }
+
+            #booknow:hover {
+                background-color: #1e40af;
+            }
+
+            #booknow a {
+                text-decoration: none;
+                color: white;
+                font-weight: 600;
+            }
+
+            /* Hero Section */
+            .hero-section {
+                background-image:  linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), 
+                        url('assets/images/background.jpg');
+                background-size: cover;
+                background-position: center;
+                color: white;
+                text-align: center;
+                padding: 80px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 3rem;
+                font-weight: 900;
+                margin-bottom: 20px;
+                letter-spacing: 1px;
+            }
+
+            .hero-section p {
+                font-size: 1.2rem;
+                max-width: 700px;
+                margin: 0 auto 30px;
+                line-height: 1.6;
+            }
+
+            .cta-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                border-radius: 4px;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: none;
+            }
+
+            .btn-primary {
+                background-color: #2563eb;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background-color: #1e40af;
+            }
+
+            .btn-outline {
+                background-color: transparent;
+                color: white;
+                border: 2px solid white;
+            }
+
+            .btn-outline:hover {
+                background-color: white;
+                color: #2563eb;
+            }
+
+            /* Booking Form */
+            .booking-section {
+                padding: 60px 20px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .booking-container {
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+                padding: 40px;
+                margin-top: -100px;
+                position: relative;
+            }
+
+            .booking-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .booking-header h2 {
+                font-size: 28px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .booking-header p {
+                color: #6b7280;
+                font-size: 16px;
+            }
+
+            .form-row {
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0 -15px;
+            }
+
+            .form-group {
+                flex: 1 0 calc(50% - 30px);
+                margin: 0 15px 20px;
+                position: relative;
+            }
+
+            @media (max-width: 768px) {
+                .form-group {
+                    flex: 1 0 calc(100% - 30px);
+                }
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #4b5563;
+                font-size: 14px;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 12px 15px;
+                border: 1px solid #d1d5db;
+                border-radius: 4px;
+                font-size: 16px;
+                transition: all 0.3s;
+            }
+
+            .form-control:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+                outline: none;
+            }
+
+            .error-message {
+                color: #ef4444;
+                font-size: 12px;
+                margin-top: 5px;
+                display: none;
+            }
+
+            .vehicle-options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+
+            .vehicle-option {
+                flex: 1;
+                min-width: 120px;
+                border: 2px solid #d1d5db;
+                border-radius: 8px;
+                padding: 15px;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .vehicle-option:hover {
+                border-color: #2563eb;
+            }
+
+            .vehicle-option.selected {
+                border-color: #2563eb;
+                background-color: rgba(37, 99, 235, 0.05);
+            }
+
+            .vehicle-option img {
+                height: 60px;
+                margin-bottom: 10px;
+            }
+
+            .vehicle-option h4 {
+                margin-bottom: 5px;
+                font-size: 16px;
+            }
+
+            .vehicle-option p {
+                color: #6b7280;
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                background-color: #2563eb;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 14px 30px;
+                font-size: 16px;
+                font-weight: 600;
+                width: 100%;
+                cursor: pointer;
+                transition: all 0.3s;
+                margin-top: 10px;
+            }
+
+            .submit-btn:hover {
+                background-color: #1e40af;
+            }
+
+            /* Features Section */
+            .features-section {
+                padding: 80px 20px;
+                background-color: #f9fafb;
+            }
+
+            .features-container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .section-title {
+                text-align: center;
+                margin-bottom: 50px;
+            }
+
+            .section-title h2 {
+                font-size: 32px;
+                color: #333;
+                margin-bottom: 15px;
+            }
+
+            .section-title p {
+                color: #6b7280;
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .features-grid {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+            }
+
+            .feature-card {
+                flex: 1 0 250px;
+                max-width: 350px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                padding: 30px;
+                text-align: center;
+                transition: all 0.3s;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                background-color: rgba(37, 99, 235, 0.1);
+                border-radius: 50%;
+                margin: 0 auto 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .feature-icon i {
+                font-size: 24px;
+                color: #2563eb;
+            }
+
+            .feature-card h3 {
+                margin-bottom: 15px;
+                color: #333;
+            }
+
+            .feature-card p {
+                color: #6b7280;
+                line-height: 1.6;
+            }
+
+            /* Footer */
+            footer {
+                background-color: #1f2937;
+                color: white;
+                padding: 60px 20px 20px;
+            }
+
+            .footer-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .footer-col {
+                flex: 1 0 200px;
+                margin-bottom: 30px;
+            }
+
+            .footer-col h4 {
+                font-size: 18px;
+                margin-bottom: 20px;
+                position: relative;
+            }
+
+            .footer-col h4::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -8px;
+                height: 2px;
+                width: 50px;
+                background-color: #2563eb;
+            }
+
+            .footer-col p {
+                margin-bottom: 10px;
+                color: #d1d5db;
+            }
+
+            .footer-col a {
+                display: block;
+                margin-bottom: 10px;
+                color: #d1d5db;
+                text-decoration: none;
+                transition: all 0.3s;
+            }
+
+            .footer-col a:hover {
+                color: white;
+                padding-left: 5px;
+            }
+
+            .social-icons {
+                display: flex;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .social-icons a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background-color: rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                transition: all 0.3s;
+            }
+
+            .social-icons a:hover {
+                background-color: #2563eb;
+                transform: translateY(-3px);
+            }
+
+            .footer-bottom {
+                text-align: center;
+                padding-top: 30px;
+                margin-top: 30px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                color: #9ca3af;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     </head>
     <body>
+        <!-- Header Section -->
         <section id="header">
-            <a href="#"  class="logo"><img width="60" src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" class="logo" alt=""> </a>
+            <a href="#" class="logo"><img width="60" src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
             <div>
                 <ul id="navbar">
-                    <li><a class="active" href="index.html">Home</a></li>
-                    <!--<li><a href="shop.html">Shop</a></li>-->
-                    <li><a href="blog.html">Help</a></li>
-                    <li><a href="./views/auth-layout/sign-in/signIn.jsp">Sign in</a></li>
-                    <button id="booknow"><a class='booknow' href="contact.html">Boo now</a></button>
-
-                    <li id="lg-bag"><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
-                    <a href="#" id="close"><i class="far fa-times"></i></a>
+                    <li><a href="">Home</a></li>
+                    <li><a href="./views/main-layout/Services.jsp">Services</a></li>
+                    <li><a href="./views/main-layout/helpPage.jsp">Help</a></li>
+                    <li><a href="account.html">My Account</a></li>
+                    <button id="booknow"><a class='booknow' href="contact.html">Contact Us</a></button>
                 </ul>
             </div>
-
         </section>
 
-        <div class="background">
-            <div class="backgrond-section">
-
-                <h1 class   ='heading'>MEGA CITY CAB</h1>
-                <div class="paragraph">
-                    asdkjasldkhadlshakjsdhkaslkashjgdlagdkjhagsdkjahsdgjahsgdjahsdglhasgdas
-                    asdkjasldkhadlshakjsdhkaslkashjgdlagdkj asdkjasldkhadlshakj
-                </div>
-                <div>
-                    <button class="btn btn-1">
-                        Get in touch
-                    </button>
-                    <button class="btn btn-2">
-                        Book now
-                    </button>
-                </div>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>BOOK YOUR RIDE NOW</h1>
+            <p>Experience comfortable, safe and reliable transportation across the city with our professional drivers and well-maintained vehicles.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary">Book Now</button>
+                <button class="btn btn-outline">Learn More</button>
             </div>
         </div>
 
-        <div class="form">
-            <h2>MAKE A BOOKING NOW!!</h2>
-            <div class="inputs">
-
-                <div>
-                    <input id="name" placeholder="name"/>
-                    <span id="nameError" class="error-message"></span>
-
+        <!-- Booking Form Section -->
+        <section class="booking-section">
+            <div class="booking-container">
+                <div class="booking-header">
+                    <h2>MAKE A RESERVATION</h2>
+                    <p>Fill in the details below to book your ride</p>
                 </div>
 
-                <div >
-                    <input type="date" id="date" placeholder="date"/>
-                    <span id="dateError" class="error-message"></span>
+                <!-- Vehicle Selection -->
+                <h3 class="form-label">Select Vehicle Type</h3>
+                <div class="vehicle-options">
+                    <div class="vehicle-option" onclick="selectVehicle('economy')">
+                        <img src="/api/placeholder/120/60" alt="Economy Car">
+                        <h4>Economy</h4>
+                        <p>Up to 4 passengers</p>
+                    </div>
+                    <div class="vehicle-option" onclick="selectVehicle('premium')">
+                        <img src="/api/placeholder/120/60" alt="Premium Car">
+                        <h4>Premium</h4>
+                        <p>Up to 4 passengers</p>
+                    </div>
+                    <div class="vehicle-option" onclick="selectVehicle('suv')">
+                        <img src="/api/placeholder/120/60" alt="SUV">
+                        <h4>SUV</h4>
+                        <p>Up to 6 passengers</p>
+                    </div>
+                    <div class="vehicle-option" onclick="selectVehicle('van')">
+                        <img src="/api/placeholder/120/60" alt="Van">
+                        <h4>Van</h4>
+                        <p>Up to 12 passengers</p>
+                    </div>
                 </div>
+                <input type="hidden" id="vehicleType" name="vehicleType" value="">
+
+                <form id="bookingForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter your full name">
+                            <span id="nameError" class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile" class="form-label">Mobile Number</label>
+                            <input type="text" id="mobile" class="form-control" placeholder="Enter your mobile number">
+                            <span id="mobileError" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date" class="form-label">Pickup Date</label>
+                            <input type="date" id="date" class="form-control">
+                            <span id="dateError" class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time" class="form-label">Pickup Time</label>
+                            <input type="time" id="time" class="form-control">
+                            <span id="timeError" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pickup" class="form-label">Pickup Location</label>
+                            <input type="text" id="pickup" class="form-control" placeholder="Enter pickup address">
+                            <span id="pickupError" class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="drop" class="form-label">Drop Location</label>
+                            <input type="text" id="drop" class="form-control" placeholder="Enter destination address">
+                            <span id="dropError" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="passengers" class="form-label">Number of Passengers</label>
+                            <select id="passengers" class="form-control">
+                                <option value="1">1 passenger</option>
+                                <option value="2">2 passengers</option>
+                                <option value="3">3 passengers</option>
+                                <option value="4">4 passengers</option>
+                                <option value="5">5 passengers</option>
+                                <option value="6">6+ passengers</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="form-label">Your Address</label>
+                            <input type="text" id="address" class="form-control" placeholder="Enter your address">
+                            <span id="addressError" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="flex-basis: 100%;">
+                            <label for="notes" class="form-label">Special Instructions (Optional)</label>
+                            <textarea id="notes" class="form-control" rows="3" placeholder="Any special requests or instructions for your driver"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="button" class="submit-btn" onclick="validateForm()">BOOK NOW</button>
+                </form>
             </div>
+        </section>
 
-            <div class="inputs">
-
-                <div>
-                    <input id="pickup" placeholder="pick up location"/>
-                    <span id="pickupError" class="error-message"></span>
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="features-container">
+                <div class="section-title">
+                    <h2>Why Choose Mega City Cab</h2>
+                    <p>Experience the best in transportation services with our professional drivers and premium vehicles</p>
                 </div>
 
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Punctual Service</h3>
+                        <p>We value your time and ensure our drivers arrive at the scheduled pickup time, every time.</p>
+                    </div>
 
-                <div >
-                    <input id="drop" placeholder="drop location"/>
-                    <span id="dropError" class="error-message"></span>
-                </div>
-            </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Safe Rides</h3>
+                        <p>All our drivers are professionally trained, vetted, and committed to your safety.</p>
+                    </div>
 
-            <div class="inputs">
-                <div>
-                    <input id="mobile" placeholder="mobile number" />
-                    <span id="mobileError" class="error-message"></span>
-                </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3>Clean Vehicles</h3>
+                        <p>Our vehicles are regularly maintained and sanitized to ensure a comfortable journey.</p>
+                    </div>
 
-
-                <div >
-                    <input id="address" placeholder="address"/>
-                    <span id="addressError" class="error-message"></span>
-                </div>
-            </div>
-
-            <button class="btn-new" onclick="validateForm()">Book now</button>
-        </div>
-
-        <footer class="section-p1">
-            <div class="col logo">
-                <img src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif"alt="">
-                <h4>Contact</h4>
-                <p><strong>Address:</strong> Lahore, Pakistan - 54840</p>
-                <p><strong>Phone:</strong> +92-321-4655990</p>
-                <p><strong>Hours:</strong> 10:00 - 18:00, Mon - Sat</p>
-                <div class="follow">
-                    <h4>Follow us</h4>
-                    <div class="icon">
-                        <i class="fab fa-facebook-f"></i>
-                        <i class="fab fa-twitter"></i>
-                        <i class="fab fa-instagram"></i>
-                        <i class="fab fa-pinterest-p"></i>
-                        <i class="fab fa-youtube"></i>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <h3>Transparent Pricing</h3>
+                        <p>Know exactly what you'll pay with our upfront pricing policy with no hidden charges.</p>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <h4>About</h4>
-                <a href="#">About us</a>
-                <a href="#">Delivery Information</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms & Conditions</a>
-                <a href="#">Contact Us</a>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-col">
+                    <img src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab" width="60">
+                    <p>Mega City Cab provides reliable transportation services across the city, ensuring comfort and safety for all passengers.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Our Services</a>
+                    <a href="about.html">About Us</a>
+                    <a href="booking.html">Book a Ride</a>
+                    <a href="contact.html">Contact Us</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <a href="#">Airport Transfer</a>
+                    <a href="#">City Tours</a>
+                    <a href="#">Corporate Service</a>
+                    <a href="#">Intercity Travel</a>
+                    <a href="#">Special Events</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Lahore, Pakistan - 54840</p>
+                    <p><i class="fas fa-phone"></i> +92-321-4655990</p>
+                    <p><i class="fas fa-envelope"></i> info@megacitycab.com</p>
+                    <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
+                </div>
             </div>
-            <div class="col">
-                <h4>My Account</h4>
-                <a href="#">Sign In</a>
-                <a href="#">View Cart</a>
-                <a href="#">My Wishlist</a>
-                <a href="#">Track My Order</a>
-                <a href="#">Help</a>
-            </div>
-            <div class="col install">
-                <h4>Install App</h4>
-                <p>From App Store or Google Play</p>
-<!--                <div class="row">
-                    <img src="images/pay/app.jpg" alt="">
-                    <img src="images/pay/play.jpg" alt="">
-                </div>-->
-                <p>Secured Payment Gateway</p>
-                <img src="images/pay/pay.png" alt="">
-            </div>
-            <div class="copyright">
-                <p>Created By | All Rights Reserved | &#169; 2025</p>
+
+            <div class="footer-bottom">
+                <p>© 2025 Mega City Cab | All Rights Reserved</p>
             </div>
         </footer>
 
-
         <script>
+            function selectVehicle(vehicleType) {
+                // Update hidden input
+                document.getElementById('vehicleType').value = vehicleType;
+                
+                // Update visual selection
+                const options = document.querySelectorAll('.vehicle-option');
+                options.forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Find the clicked option and add selected class
+                event.currentTarget.classList.add('selected');
+            }
+            
             function validateForm() {
                 // Get all input fields
                 const name = document.getElementById('name');
                 const date = document.getElementById('date');
+                const time = document.getElementById('time');
                 const pickup = document.getElementById('pickup');
                 const drop = document.getElementById('drop');
                 const mobile = document.getElementById('mobile');
                 const address = document.getElementById('address');
+                const vehicleType = document.getElementById('vehicleType');
 
                 // Get all error message elements
                 const nameError = document.getElementById('nameError');
                 const dateError = document.getElementById('dateError');
+                const timeError = document.getElementById('timeError');
                 const pickupError = document.getElementById('pickupError');
                 const dropError = document.getElementById('dropError');
                 const mobileError = document.getElementById('mobileError');
@@ -167,6 +723,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 // Reset all error messages
                 nameError.style.display = 'none';
                 dateError.style.display = 'none';
+                timeError.style.display = 'none';
                 pickupError.style.display = 'none';
                 dropError.style.display = 'none';
                 mobileError.style.display = 'none';
@@ -176,19 +733,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 let isValid = true;
 
                 if (name.value.trim() === '') {
-                    nameError.textContent = 'Name is required';
+                    nameError.textContent = 'Full name is required';
                     nameError.style.display = 'block';
                     isValid = false;
                 }
 
                 if (date.value.trim() === '') {
-                    dateError.textContent = 'Date is required';
+                    dateError.textContent = 'Pickup date is required';
                     dateError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (time.value.trim() === '') {
+                    timeError.textContent = 'Pickup time is required';
+                    timeError.style.display = 'block';
                     isValid = false;
                 }
 
                 if (pickup.value.trim() === '') {
-                    pickupError.textContent = 'Pick up location is required';
+                    pickupError.textContent = 'Pickup location is required';
                     pickupError.style.display = 'block';
                     isValid = false;
                 }
@@ -210,36 +773,52 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     addressError.style.display = 'block';
                     isValid = false;
                 }
+                
+                if (vehicleType.value === '') {
+                    alert('Please select a vehicle type');
+                    isValid = false;
+                }
 
-                // If all fields are valid, you can proceed with the booking
+                // If all fields are valid, proceed with booking
                 if (isValid) {
-                    alert('Booking successful!');
-                    // You can add your booking logic here
+                    alert('Booking successful! Your ride has been confirmed.');
+                    // Reset form after successful booking
+                    document.getElementById('bookingForm').reset();
+                    // Reset vehicle selection
+                    const options = document.querySelectorAll('.vehicle-option');
+                    options.forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    vehicleType.value = '';
                 }
             }
 
-            // Add event listeners to clear validation messages when typing
-            document.getElementById('name').addEventListener('input', function () {
+            // Event listeners to clear validation messages when typing
+            document.getElementById('name').addEventListener('input', function() {
                 document.getElementById('nameError').style.display = 'none';
             });
 
-            document.getElementById('date').addEventListener('input', function () {
+            document.getElementById('date').addEventListener('input', function() {
                 document.getElementById('dateError').style.display = 'none';
             });
+            
+            document.getElementById('time').addEventListener('input', function() {
+                document.getElementById('timeError').style.display = 'none';
+            });
 
-            document.getElementById('pickup').addEventListener('input', function () {
+            document.getElementById('pickup').addEventListener('input', function() {
                 document.getElementById('pickupError').style.display = 'none';
             });
 
-            document.getElementById('drop').addEventListener('input', function () {
+            document.getElementById('drop').addEventListener('input', function() {
                 document.getElementById('dropError').style.display = 'none';
             });
 
-            document.getElementById('mobile').addEventListener('input', function () {
+            document.getElementById('mobile').addEventListener('input', function() {
                 document.getElementById('mobileError').style.display = 'none';
             });
 
-            document.getElementById('address').addEventListener('input', function () {
+            document.getElementById('address').addEventListener('input', function() {
                 document.getElementById('addressError').style.display = 'none';
             });
         </script>
