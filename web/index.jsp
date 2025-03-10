@@ -1,3 +1,13 @@
+<%-- 
+    Document   : index
+    Created on : Mar 10, 2025, 8:47:55 PM
+    Author     : PC
+--%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="DAO.LocationDAO"%>
+<%@ page import="Models.Location"%>
+<%@ page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -297,6 +307,60 @@
             .submit-btn:hover {
                 background-color: #1e40af;
             }
+            
+            /* Price info styling */
+.price-info {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Price section styling */
+.price-section {
+    margin: 20px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.price-details {
+    width: 100%;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.price-row.total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Vehicle option selected state */
+.vehicle-option.selected {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.vehicle-option {
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vehicle-option:hover {
+    border-color: #4CAF50;
+}
 
             /* Features Section */
             .features-section {
@@ -462,7 +526,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     </head>
     <body>
-        <!-- Header Section -->
         <section id="header">
             <a href="#" class="logo"><img width="60" src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
             <div>
@@ -476,7 +539,6 @@
             </div>
         </section>
 
-        <!-- Hero Section -->
         <div class="hero-section">
             <h1>BOOK YOUR RIDE NOW</h1>
             <p>Experience comfortable, safe and reliable transportation across the city with our professional drivers and well-maintained vehicles.</p>
@@ -485,117 +547,156 @@
                 <button class="btn btn-outline">Learn More</button>
             </div>
         </div>
+        
+<section class="booking-section">
+    <div class="booking-container">
+        <div class="booking-header">
+            <h2>MAKE A RESERVATION</h2>
+            <p>Fill in the details below to book your ride</p>
+        </div>
 
-        <!-- Booking Form Section -->
-        <section class="booking-section">
-            <div class="booking-container">
-                <div class="booking-header">
-                    <h2>MAKE A RESERVATION</h2>
-                    <p>Fill in the details below to book your ride</p>
-                </div>
-
-                <!-- Vehicle Selection -->
-                <h3 class="form-label">Select Vehicle Type</h3>
-                <div class="vehicle-options">
-                    <div class="vehicle-option" onclick="selectVehicle('economy')">
-                        <img src="/api/placeholder/120/60" alt="Economy Car">
-                        <h4>Economy</h4>
-                        <p>Up to 4 passengers</p>
-                    </div>
-                    <div class="vehicle-option" onclick="selectVehicle('premium')">
-                        <img src="/api/placeholder/120/60" alt="Premium Car">
-                        <h4>Premium</h4>
-                        <p>Up to 4 passengers</p>
-                    </div>
-                    <div class="vehicle-option" onclick="selectVehicle('suv')">
-                        <img src="/api/placeholder/120/60" alt="SUV">
-                        <h4>SUV</h4>
-                        <p>Up to 6 passengers</p>
-                    </div>
-                    <div class="vehicle-option" onclick="selectVehicle('van')">
-                        <img src="/api/placeholder/120/60" alt="Van">
-                        <h4>Van</h4>
-                        <p>Up to 12 passengers</p>
-                    </div>
-                </div>
-                <input type="hidden" id="vehicleType" name="vehicleType" value="">
-
-                <form id="bookingForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Full Name</label>
-                            <input type="text" id="name" class="form-control" placeholder="Enter your full name">
-                            <span id="nameError" class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="mobile" class="form-label">Mobile Number</label>
-                            <input type="text" id="mobile" class="form-control" placeholder="Enter your mobile number">
-                            <span id="mobileError" class="error-message"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="date" class="form-label">Pickup Date</label>
-                            <input type="date" id="date" class="form-control">
-                            <span id="dateError" class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="time" class="form-label">Pickup Time</label>
-                            <input type="time" id="time" class="form-control">
-                            <span id="timeError" class="error-message"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="pickup" class="form-label">Pickup Location</label>
-                            <input type="text" id="pickup" class="form-control" placeholder="Enter pickup address">
-                            <span id="pickupError" class="error-message"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="drop" class="form-label">Drop Location</label>
-                            <input type="text" id="drop" class="form-control" placeholder="Enter destination address">
-                            <span id="dropError" class="error-message"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="passengers" class="form-label">Number of Passengers</label>
-                            <select id="passengers" class="form-control">
-                                <option value="1">1 passenger</option>
-                                <option value="2">2 passengers</option>
-                                <option value="3">3 passengers</option>
-                                <option value="4">4 passengers</option>
-                                <option value="5">5 passengers</option>
-                                <option value="6">6+ passengers</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="address" class="form-label">Your Address</label>
-                            <input type="text" id="address" class="form-control" placeholder="Enter your address">
-                            <span id="addressError" class="error-message"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group" style="flex-basis: 100%;">
-                            <label for="notes" class="form-label">Special Instructions (Optional)</label>
-                            <textarea id="notes" class="form-control" rows="3" placeholder="Any special requests or instructions for your driver"></textarea>
-                        </div>
-                    </div>
-
-                    <button type="button" class="submit-btn" onclick="validateForm()">BOOK NOW</button>
-                </form>
+        <h3 class="form-label">Select Vehicle Type</h3>
+        <div class="vehicle-options">
+            <div class="vehicle-option" onclick="selectVehicle('economy')">
+                <img src="/api/placeholder/120/60" alt="Economy Car">
+                <h4>Economy</h4>
+                <p>Up to 4 passengers</p>
+                <p class="price-info">Rs. 60/km + Rs. 150 base</p>
             </div>
-        </section>
+            <div class="vehicle-option" onclick="selectVehicle('premium')">
+                <img src="/api/placeholder/120/60" alt="Premium Car">
+                <h4>Premium</h4>
+                <p>Up to 4 passengers</p>
+                <p class="price-info">Rs. 80/km + Rs. 200 base</p>
+            </div>
+            <div class="vehicle-option" onclick="selectVehicle('suv')">
+                <img src="/api/placeholder/120/60" alt="SUV">
+                <h4>SUV</h4>
+                <p>Up to 6 passengers</p>
+                <p class="price-info">Rs. 100/km + Rs. 250 base</p>
+            </div>
+            <div class="vehicle-option" onclick="selectVehicle('van')">
+                <img src="/api/placeholder/120/60" alt="Van">
+                <h4>Van</h4>
+                <p>Up to 12 passengers</p>
+                <p class="price-info">Rs. 120/km + Rs. 300 base</p>
+            </div>
+        </div>
+        <input type="hidden" id="vehicleType" name="vehicleType" value="">
 
-        <!-- Features Section -->
+        <form id="bookingForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter your full name">
+                    <span id="nameError" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile" class="form-label">Mobile Number</label>
+                    <input type="text" id="mobile" class="form-control" placeholder="Enter your mobile number">
+                    <span id="mobileError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date" class="form-label">Pickup Date</label>
+                    <input type="date" id="date" class="form-control">
+                    <span id="dateError" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="time" class="form-label">Pickup Time</label>
+                    <input type="time" id="time" class="form-control">
+                    <span id="timeError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pickup" class="form-label">Pickup Location</label>
+           <select id="pickupLocation" name="pickupLocation" class="form-control" required>
+                                <option value="">Select Pickup Location</option>
+                                <% 
+                                LocationDAO locationDAO = new LocationDAO();
+                                List<Location> locations = locationDAO.getAllLocations();
+                                
+                                for(Location location : locations) {
+                                %>
+                                    <option value="<%= location.getLocationID() %>"><%= location.getLocationName() %></option>
+                                <% } %>
+                            </select>
+
+                    <span id="pickupError" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="drop" class="form-label">Drop Location</label>
+  <select id="dropLocation" name="dropLocation" class="form-control" required>
+                                <option value="">Select Drop Location</option>
+                                <% for(Location location : locations) { %>
+                                    <option value="<%= location.getLocationID() %>"><%= location.getLocationName() %></option>
+                                <% } %>
+                            </select>
+
+                    <span id="dropError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="passengers" class="form-label">Number of Passengers</label>
+                    <select id="passengers" class="form-control">
+                        <option value="1">1 passenger</option>
+                        <option value="2">2 passengers</option>
+                        <option value="3">3 passengers</option>
+                        <option value="4">4 passengers</option>
+                        <option value="5">5 passengers</option>
+                        <option value="6">6+ passengers</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Your Address</label>
+                    <input type="text" id="address" class="form-control" placeholder="Enter your address">
+                    <span id="addressError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" style="flex-basis: 100%;">
+                    <label for="notes" class="form-label">Special Instructions (Optional)</label>
+                    <textarea id="notes" class="form-control" rows="3" placeholder="Any special requests or instructions for your driver"></textarea>
+                </div>
+            </div>
+
+            <div class="price-section">
+                <div class="price-details">
+                    <div class="price-row">
+                        <span>Distance:</span>
+                        <span id="distance-value">0.00 km</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Base Price:</span>
+                        <span id="base-price">Rs. 0.00</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Distance Cost:</span>
+                        <span id="distance-cost">Rs. 0.00</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total Price:</span>
+                        <span id="total-price">Rs. 0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="validateForm()">BOOK NOW</button>
+        </form>
+    </div>
+</section>
+
         <section class="features-section">
             <div class="features-container">
                 <div class="section-title">
@@ -639,7 +740,6 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer>
             <div class="footer-container">
                 <div class="footer-col">
@@ -655,7 +755,7 @@
 
                 <div class="footer-col">
                     <h4>Quick Links</h4>
-                    <a href="index.html">Home</a>
+                    <a href="index.jsp">Home</a>
                     <a href="services.html">Our Services</a>
                     <a href="about.html">About Us</a>
                     <a href="booking.html">Book a Ride</a>
@@ -686,141 +786,222 @@
         </footer>
 
         <script>
-            function selectVehicle(vehicleType) {
-                // Update hidden input
-                document.getElementById('vehicleType').value = vehicleType;
-                
-                // Update visual selection
-                const options = document.querySelectorAll('.vehicle-option');
-                options.forEach(option => {
-                    option.classList.remove('selected');
-                });
-                
-                // Find the clicked option and add selected class
-                event.currentTarget.classList.add('selected');
+let locations = [];
+let selectedVehicleType = '';
+let basePrice = 0;
+let pricePerKm = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadLocations();
+    
+    document.getElementById('pickup').addEventListener('change', calculatePriceIfPossible);
+    document.getElementById('drop').addEventListener('change', calculatePriceIfPossible);
+});
+
+function loadLocations() {
+    fetch('getLocations')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            locations = data;
+            
+            const pickupSelect = document.getElementById('pickup');
+            const dropSelect = document.getElementById('drop');
+            
+            while (pickupSelect.options.length > 1) {
+                pickupSelect.remove(1);
             }
             
-            function validateForm() {
-                // Get all input fields
-                const name = document.getElementById('name');
-                const date = document.getElementById('date');
-                const time = document.getElementById('time');
-                const pickup = document.getElementById('pickup');
-                const drop = document.getElementById('drop');
-                const mobile = document.getElementById('mobile');
-                const address = document.getElementById('address');
-                const vehicleType = document.getElementById('vehicleType');
-
-                // Get all error message elements
-                const nameError = document.getElementById('nameError');
-                const dateError = document.getElementById('dateError');
-                const timeError = document.getElementById('timeError');
-                const pickupError = document.getElementById('pickupError');
-                const dropError = document.getElementById('dropError');
-                const mobileError = document.getElementById('mobileError');
-                const addressError = document.getElementById('addressError');
-
-                // Reset all error messages
-                nameError.style.display = 'none';
-                dateError.style.display = 'none';
-                timeError.style.display = 'none';
-                pickupError.style.display = 'none';
-                dropError.style.display = 'none';
-                mobileError.style.display = 'none';
-                addressError.style.display = 'none';
-
-                // Validate each field
-                let isValid = true;
-
-                if (name.value.trim() === '') {
-                    nameError.textContent = 'Full name is required';
-                    nameError.style.display = 'block';
-                    isValid = false;
-                }
-
-                if (date.value.trim() === '') {
-                    dateError.textContent = 'Pickup date is required';
-                    dateError.style.display = 'block';
-                    isValid = false;
-                }
-                
-                if (time.value.trim() === '') {
-                    timeError.textContent = 'Pickup time is required';
-                    timeError.style.display = 'block';
-                    isValid = false;
-                }
-
-                if (pickup.value.trim() === '') {
-                    pickupError.textContent = 'Pickup location is required';
-                    pickupError.style.display = 'block';
-                    isValid = false;
-                }
-
-                if (drop.value.trim() === '') {
-                    dropError.textContent = 'Drop location is required';
-                    dropError.style.display = 'block';
-                    isValid = false;
-                }
-
-                if (mobile.value.trim() === '') {
-                    mobileError.textContent = 'Mobile number is required';
-                    mobileError.style.display = 'block';
-                    isValid = false;
-                }
-
-                if (address.value.trim() === '') {
-                    addressError.textContent = 'Address is required';
-                    addressError.style.display = 'block';
-                    isValid = false;
-                }
-                
-                if (vehicleType.value === '') {
-                    alert('Please select a vehicle type');
-                    isValid = false;
-                }
-
-                // If all fields are valid, proceed with booking
-                if (isValid) {
-                    alert('Booking successful! Your ride has been confirmed.');
-                    // Reset form after successful booking
-                    document.getElementById('bookingForm').reset();
-                    // Reset vehicle selection
-                    const options = document.querySelectorAll('.vehicle-option');
-                    options.forEach(option => {
-                        option.classList.remove('selected');
-                    });
-                    vehicleType.value = '';
-                }
+            while (dropSelect.options.length > 1) {
+                dropSelect.remove(1);
             }
-
-            // Event listeners to clear validation messages when typing
-            document.getElementById('name').addEventListener('input', function() {
-                document.getElementById('nameError').style.display = 'none';
-            });
-
-            document.getElementById('date').addEventListener('input', function() {
-                document.getElementById('dateError').style.display = 'none';
-            });
             
-            document.getElementById('time').addEventListener('input', function() {
-                document.getElementById('timeError').style.display = 'none';
+            locations.forEach(location => {
+                const pickupOption = document.createElement('option');
+                pickupOption.value = location.locationID;
+                pickupOption.textContent = location.locationName;
+                pickupSelect.appendChild(pickupOption);
+                
+                const dropOption = document.createElement('option');
+                dropOption.value = location.locationID;
+                dropOption.textContent = location.locationName;
+                dropSelect.appendChild(dropOption);
             });
+        })
+        .catch(error => {
+            console.error('Error loading locations:', error);
+            alert('Failed to load locations. Please refresh the page or try again later.');
+        });
+}
 
-            document.getElementById('pickup').addEventListener('input', function() {
-                document.getElementById('pickupError').style.display = 'none';
-            });
+function selectVehicle(vehicleType) {
+    document.getElementById('vehicleType').value = vehicleType;
+    selectedVehicleType = vehicleType;
+    
+    // Update visual selection
+    const options = document.querySelectorAll('.vehicle-option');
+    options.forEach(option => {
+        option.classList.remove('selected');
+    });
+    
+    event.currentTarget.classList.add('selected');
+    
+    switch(vehicleType) {
+        case 'economy':
+            basePrice = 150;
+            pricePerKm = 60;
+            break;
+        case 'premium':
+            basePrice = 200;
+            pricePerKm = 80;
+            break;
+        case 'suv':
+            basePrice = 250;
+            pricePerKm = 100;
+            break;
+        case 'van':
+            basePrice = 300;
+            pricePerKm = 120;
+            break;
+    }
+    
+    document.getElementById('base-price').textContent = `Rs. ${basePrice.toFixed(2)}`;
+    
+    calculatePriceIfPossible();
+}
 
-            document.getElementById('drop').addEventListener('input', function() {
-                document.getElementById('dropError').style.display = 'none';
-            });
+function calculatePriceIfPossible() {
+    const pickupId = document.getElementById('pickup').value;
+    const dropId = document.getElementById('drop').value;
+    
+    if (pickupId && dropId && selectedVehicleType) {
+        calculatePrice(pickupId, dropId);
+    }
+}
 
-            document.getElementById('mobile').addEventListener('input', function() {
-                document.getElementById('mobileError').style.display = 'none';
-            });
+function calculatePrice(fromLocationId, toLocationId) {
+    document.getElementById('distance-value').textContent = 'Calculating...';
+    document.getElementById('distance-cost').textContent = 'Calculating...';
+    document.getElementById('total-price').textContent = 'Calculating...';
+    
+    fetch(`calculatePrice?fromLocationId=${fromLocationId}&toLocationId=${toLocationId}&vehicleType=${selectedVehicleType}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                document.getElementById('distance-value').textContent = `${data.distance.toFixed(2)} km`;
+                
+                document.getElementById('base-price').textContent = `Rs. ${data.basePrice.toFixed(2)}`;
+                
+                document.getElementById('distance-cost').textContent = `Rs. ${data.distanceCost.toFixed(2)}`;
+                
+                document.getElementById('total-price').textContent = data.formattedPrice;
+            } else {
+                document.getElementById('distance-value').textContent = 'N/A';
+                document.getElementById('distance-cost').textContent = 'N/A';
+                document.getElementById('total-price').textContent = 'Route not available';
+                
+                alert(data.error || 'Route not available between the selected locations.');
+            }
+        })
+        .catch(error => {
+            console.error('Error calculating price:', error);
+            
+            // Reset displays
+            document.getElementById('distance-value').textContent = 'Error';
+            document.getElementById('distance-cost').textContent = 'Error';
+            document.getElementById('total-price').textContent = 'Error';
+            
+            alert('Failed to calculate price. Please try again later.');
+        });
+}
 
-            document.getElementById('address').addEventListener('input', function() {
-                document.getElementById('addressError').style.display = 'none';
-            });
+function validateForm() {
+    const name = document.getElementById('name');
+    const date = document.getElementById('date');
+    const time = document.getElementById('time');
+    const pickup = document.getElementById('pickup');
+    const drop = document.getElementById('drop');
+    const mobile = document.getElementById('mobile');
+    const address = document.getElementById('address');
+    const vehicleType = document.getElementById('vehicleType');
+
+    const nameError = document.getElementById('nameError');
+    const dateError = document.getElementById('dateError');
+    const timeError = document.getElementById('timeError');
+    const pickupError = document.getElementById('pickupError');
+    const dropError = document.getElementById('dropError');
+    const mobileError = document.getElementById('mobileError');
+    const addressError = document.getElementById('addressError');
+
+    nameError.textContent = '';
+    nameError.style.display = 'none';
+    dateError.textContent = '';
+    dateError.style.display = 'none';
+    timeError.textContent = '';
+    timeError.style.display = 'none';
+    pickupError.textContent = '';
+    pickupError.style.display = 'none';
+    dropError.textContent = '';
+    dropError.style.display = 'none';
+    mobileError.textContent = '';
+    mobileError.style.display = 'none';
+    addressError.textContent = '';
+    addressError.style.display = 'none';
+
+    let isValid = true;
+
+    if (name.value.trim() === '') {
+        nameError.textContent = 'Full name is required';
+        nameError.style.display = 'block';
+        isValid = false;
+    }
+
+    if (date.value.trim() === '') {
+        dateError.textContent = 'Pickup date is required';
+        dateError.style.display = 'block';
+        isValid = false;
+    } else {
+        // Validate date is not in the past
+        const selectedDate = new Date(date.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            dateError.textContent = 'Please select a future date';
+            dateError.style.display = 'block';
+            isValid = false;
+        }
+    }
+    
+    if (time.value.trim() === '') {
+        timeError.textContent = 'Pickup time is required';
+        timeError.style.display = 'block';
+        isValid = false;
+    }
+
+    if (pickup.value.trim() === '') {
+        pickupError.textContent = 'Pickup location is required';
+        pickupError.style.display = 'block';
+        isValid = false;
+    }
+
+    if (drop.value.trim() === '') {
+        dropError.textContent = 'Drop location is required';
+        dropError.style.display = 'block';
+        isValid = false;
+    }
+
+    if (mobile.value.trim() === '') {
+        mobileError.textContent = 'Mobile number is required';
         </script>
     </body>
 </html>

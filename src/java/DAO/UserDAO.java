@@ -19,7 +19,6 @@ import java.sql.Statement;
 
 public class UserDAO {
     
-    // Add a new user
     public int addUser(User user) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -29,12 +28,11 @@ public class UserDAO {
         try {
             conn = DBConnection.getConnection();
             
-            // Use prepared statement to prevent SQL injection
             String sql = "INSERT INTO user_details (username, password, userType) VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword()); // In real application, hash the password
+            stmt.setString(2, user.getPassword()); 
             stmt.setString(3, user.getUserType());
             
             int affectedRows = stmt.executeUpdate();
@@ -43,7 +41,6 @@ public class UserDAO {
                 throw new SQLException("Creating user failed, no rows affected.");
             }
             
-            // Get the auto-generated userId
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 userId = rs.getInt(1);
@@ -53,16 +50,13 @@ public class UserDAO {
             }
             
         } finally {
-            // Close resources
             if (rs != null) rs.close();
             if (stmt != null) stmt.close();
-            // Don't close connection here, might be reused
         }
         
         return userId;
     }
     
-    // Check if username already exists
     public boolean checkUsernameExists(String username) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -83,7 +77,6 @@ public class UserDAO {
             }
             
         } finally {
-            // Close resources
             if (rs != null) rs.close();
             if (stmt != null) stmt.close();
         }
@@ -91,7 +84,6 @@ public class UserDAO {
         return exists;
     }
     
-    // Delete a user by ID
     public boolean deleteUser(int userId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -107,12 +99,10 @@ public class UserDAO {
             return affectedRows > 0;
             
         } finally {
-            // Close resources
             if (stmt != null) stmt.close();
         }
     }
     
-    // Get user by ID
     public User getUserById(int userId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -137,7 +127,6 @@ public class UserDAO {
             }
             
         } finally {
-            // Close resources
             if (rs != null) rs.close();
             if (stmt != null) stmt.close();
         }
@@ -145,7 +134,6 @@ public class UserDAO {
         return user;
     }
     
-    // Authenticate user
     public User authenticateUser(String username, String password) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -158,7 +146,7 @@ public class UserDAO {
             String sql = "SELECT * FROM user_details WHERE username = ? AND password = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
-            stmt.setString(2, password); // In real application, verify against hashed password
+            stmt.setString(2, password); 
             
             rs = stmt.executeQuery();
             
@@ -171,7 +159,6 @@ public class UserDAO {
             }
             
         } finally {
-            // Close resources
             if (rs != null) rs.close();
             if (stmt != null) stmt.close();
         }
