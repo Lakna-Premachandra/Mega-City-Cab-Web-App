@@ -20,8 +20,13 @@ public class Booking {
     private String bookingDateTime;
     private double amount;
     private String status;
+    
+    private String customerName;
+    private String driverName;
+    private String carModel;
+    private String carPlateNumber;
+    private String vehicleType;
 
-    // Getters and Setters
     public int getBookingID() { return bookingID; }
     public void setBookingID(int bookingID) { this.bookingID = bookingID; }
     public int getCustomerID() { return customerID; }
@@ -40,5 +45,18 @@ public class Booking {
     public void setAmount(double amount) { this.amount = amount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public String getDriverName() { return driverName; }
+    public void setDriverName(String driverName) { this.driverName = driverName; }
+    public String getCarModel() { return carModel; }
+    public void setCarModel(String carModel) { this.carModel = carModel; }
+    public String getCarPlateNumber() { return carPlateNumber; }
+    public void setCarPlateNumber(String carPlateNumber) { this.carPlateNumber = carPlateNumber; }
+    public String getVehicleType() { return vehicleType; }
+    public void setVehicleType(String vehicleType) { this.vehicleType = vehicleType; }
+    
+
 }
 

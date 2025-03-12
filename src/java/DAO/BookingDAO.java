@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -86,7 +88,7 @@ public class BookingDAO {
         return vehicleTypes;
     }
     
-    public static void updateBookingStatus(int bookingId, String status) throws SQLException, ClassNotFoundException {
+    public static void updateBookingStatusDriver(int bookingId, String status) throws SQLException, ClassNotFoundException {
         String query = "UPDATE booking_details SET status = ? WHERE bookingID = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -102,4 +104,32 @@ public class BookingDAO {
             }
         }
     }
+
+// In BookingDAO.java
+public void updateBookingStatus(int bookingId, String status) throws SQLException, ClassNotFoundException {
+    String query = "UPDATE booking_details SET status = ? WHERE bookingID = ?";
+    
+    try (Connection conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setString(1, status);
+        stmt.setInt(2, bookingId);
+        
+        stmt.executeUpdate();
+    }
+}
+
+// New method to delete a booking
+public void deleteBooking(int bookingId) throws SQLException, ClassNotFoundException {
+    String query = "DELETE FROM booking_details WHERE bookingID = ?";
+    
+    try (Connection conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setInt(1, bookingId);
+        
+        stmt.executeUpdate();
+    }
+}
+
 }

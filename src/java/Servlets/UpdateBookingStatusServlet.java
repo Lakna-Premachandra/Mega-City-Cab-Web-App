@@ -21,7 +21,7 @@ public class UpdateBookingStatusServlet extends HttpServlet {
             String status = request.getParameter("status");
             
             // Update the booking status in the database
-            BookingDAO.updateBookingStatus(bookingId, status);
+            BookingDAO.updateBookingStatusDriver(bookingId, status);
             
             // Redirect back to the driver dashboard
             response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/driver.jsp");

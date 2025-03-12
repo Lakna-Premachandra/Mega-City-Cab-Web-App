@@ -1,3 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="DAO.BookingDAO"%>
+<%@ page import="Models.Booking"%>
+<%@ page import="DAO.DriverDAO"%>
+<%@ page import="Models.Driver"%>
+<%@ page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -347,7 +353,6 @@
                 </div>
             </div>
             
-            <!-- Bookings Section -->
             <div class="data-card" id="bookingsSection">
                 
                 <div class="table-responsive">
@@ -364,37 +369,61 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>#BK-001</td>
-                                <td>Sarah Johnson</td>
-                                <td>03/08/2025, 09:15 AM</td>
-                                <td>123 Main St</td>
-                                <td>Airport Terminal 3</td>
-                                <td>Michael Brown</td>
-                                <td><span class="status-badge status-active">Completed</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-005</td>
-                                <td>Olivia Martin</td>
-                                <td>03/09/2025, 03:00 PM</td>
-                                <td>654 Maple St</td>
-                                <td>Grand Theater</td>
-                                <td>Unassigned</td>
-                                <td><span class="status-badge status-pending">Pending</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-eye"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+                          <tbody>
+                    <%
+                    try {
+                        BookingDAO bookingDAO = new BookingDAO();
+                        List<Booking> bookingList = bookingDAO.getAllBookings();
+                        
+                        for(Booking booking : bookingList) {
+                            String statusClass = "";
+                            if(booking.getStatus().equals("Completed")) {
+                                statusClass = "status-completed";
+                            } else if(booking.getStatus().equals("Pending")) {
+                                statusClass = "status-pending";
+                            } else if(booking.getStatus().equals("Approved")) {
+                                statusClass = "status-approved";
+                            } else if(booking.getStatus().equals("Cancelled")) {
+                                statusClass = "status-cancelled";
+                            }
+                    %>
+                    <tr>
+                        <td>#BK-<%= String.format("%03d", booking.getBookingID()) %></td>
+                        <td><%= booking.getCustomerID() %></td>
+                        <td><%= booking.getBookingDateTime() %></td>
+                        <td><%= booking.getStartDestination() %></td>
+                        <td><%= booking.getEndDestination() %></td>
+                        <td><%= booking.getDriverID() == 0 ? "Unassigned" : booking.getDriverID() %></td>
+                        <td>$<%= String.format("%.2f", booking.getAmount()) %></td>
+                        <td><span class="status-badge <%= statusClass %>"><%= booking.getStatus() %></span></td>
+                        <td>
+                            <div class="table-actions">
+                                <div class="status-dropdown">
+                                    <select name="status" onchange="window.location.href=this.value;">
+                                        <option value="#">Select Status</option>
+                                        <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID() %>&status=Pending">Pending</option>
+                                        <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID() %>&status=Approved">Approved</option>
+                                        <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID() %>&status=Completed">Completed</option>
+                                        <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID() %>&status=Cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                                
+                                <a href="${pageContext.request.contextPath}/BookingActions?action=delete&id=<%= booking.getBookingID() %>" 
+                                   class="action-btn delete" 
+                                   title="Delete Booking"
+                                   onclick="return confirm('Are you sure you want to delete this booking?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <% 
+                        }
+                    } catch(Exception e) {
+                        out.println("<tr><td colspan='9'>Error retrieving booking data: " + e.getMessage() + "</td></tr>");
+                    }
+                    %>
+                </tbody>
                     </table>
                 </div>
             </div>
