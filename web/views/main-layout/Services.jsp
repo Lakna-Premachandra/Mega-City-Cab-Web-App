@@ -625,7 +625,7 @@
             
             <div class="featured-services">
                 <div class="service-card">
-                    <div class="service-img" style="background-image: url('/api/placeholder/400/320');"></div>
+                    <div class="service-img" style="background-image: url('../../assets/images/airport.jpeg');"></div>
                     <div class="service-content">
                         <h3>Airport Transfers</h3>
                         <p>Reliable and comfortable transportation to and from airports with professional drivers and on-time pickups.</p>
@@ -634,7 +634,7 @@
                 </div>
                 
                 <div class="service-card">
-                    <div class="service-img" style="background-image: url('/api/placeholder/400/320');"></div>
+                    <div class="service-img" style="background-image: url('../../assets/images/premium_photo-1728723283456-c39c5d62e12d.jpeg');"></div>
                     <div class="service-content">
                         <h3>City Tours</h3>
                         <p>Explore the city with our knowledgeable drivers who can show you the best attractions and hidden gems.</p>
@@ -643,7 +643,7 @@
                 </div>
                 
                 <div class="service-card">
-                    <div class="service-img" style="background-image: url('/api/placeholder/400/320');"></div>
+                    <div class="service-img" style="background-image: url('../../assets/images/premium_photo-1728723283456-c39c5d62e12d.jpeg');"></div>
                     <div class="service-content">
                         <h3>Corporate Service</h3>
                         <p>Professional transportation solutions for businesses with customized billing options and priority service.</p>

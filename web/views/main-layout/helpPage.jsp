@@ -442,10 +442,6 @@
             <h1>HOW CAN WE HELP YOU?</h1>
             <p>Find answers to your questions and get the support you need</p>
             
-            <div class="search-container">
-                <input type="text" class="search-box" placeholder="Search for help topics...">
-                <button class="search-btn"><i class="fas fa-search"></i></button>
-            </div>
         </div>
 
         <!-- Help Content -->
