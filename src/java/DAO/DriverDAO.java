@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -184,5 +186,54 @@ public class DriverDAO {
         }
         
         return exists;
+    }
+    
+       public static List<Driver> getAllDrivers() throws SQLException, ClassNotFoundException {
+        List<Driver> drivers = new ArrayList<>();
+        String query = "SELECT d.*, c.model, c.plate_number, c.vehicle_type, u.username " +
+                      "FROM driver_details d " +
+                      "JOIN car_details c ON d.carID = c.carID " +
+                      "JOIN user_details u ON d.userID = u.userID";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Driver driver = new Driver();
+                driver.setDriverId(rs.getInt("driverID"));
+                driver.setUserId(rs.getInt("userID"));
+                driver.setDriverName(rs.getString("driverName"));
+                driver.setPhoneNo(rs.getString("phoneNo"));
+                driver.setEmail(rs.getString("email"));
+                driver.setLicenseNumber(rs.getString("licenseNumber"));
+                driver.setCarId(rs.getInt("carID"));
+               driver.setCarModel(rs.getString("model"));
+               driver.setPlateNumber(rs.getString("plate_number"));
+               driver.setVehicleType(rs.getString("vehicle_type"));
+               driver.setUsername(rs.getString("username"));
+                
+                drivers.add(driver);
+            }
+        }
+        return drivers;
+    }
+    
+        public static void updateDriver(Driver driver) throws SQLException, ClassNotFoundException {
+        String query = "UPDATE driver_details SET driverName = ?, phoneNo = ?, email = ?, licenseNumber = ?, carID = ? " +
+                      "WHERE driverID = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setString(1, driver.getDriverName());
+            stmt.setString(2, driver.getPhoneNo());
+            stmt.setString(3, driver.getEmail());
+            stmt.setString(4, driver.getLicenseNumber());
+            stmt.setInt(5, driver.getCarId());
+            stmt.setInt(6, driver.getDriverId());
+            
+            stmt.executeUpdate();
+        }
     }
 }

@@ -17,7 +17,13 @@ public class Driver {
     private String email;
     private String licenseNumber;
     private int carId;
-    private String address; // Added for storing address info
+    private String address; 
+
+    private String username;
+    private String carModel;
+    private String plateNumber;
+    private String vehicleType;
+    private String password;
     
     public Driver() {
     }
@@ -97,6 +103,26 @@ public class Driver {
     
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    
+    public String getCarModel() { return carModel; }
+    public void setCarModel(String carModel) { this.carModel = carModel; }
+    
+    public String getPlateNumber() { return plateNumber; }
+    public void setPlateNumber(String plateNumber) { this.plateNumber = plateNumber; }
+    
+    public String getVehicleType() { return vehicleType; }
+    public void setVehicleType(String vehicleType) { this.vehicleType = vehicleType; }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     @Override

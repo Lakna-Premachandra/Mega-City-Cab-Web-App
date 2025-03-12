@@ -7,7 +7,7 @@ package Servlets;
 import DAO.CarDAO;
 import DAO.DriverDAO;
 import DAO.UserDAO;
-import Models.Car;
+import Models.Vehicle;
 import Models.Driver;
 import Models.User;
 import java.io.IOException;
@@ -84,7 +84,7 @@ public class DriverSignUpServlet extends HttpServlet {
 
             if (userId > 0) {
                 // Create Car object first
-                Car car = new Car();
+                Vehicle car = new Vehicle();
                 car.setModel("Default"); // Can be updated in profile
                 car.setYear(Calendar.getInstance().get(Calendar.YEAR)); // Current year
                 car.setPlateNumber(vehicleRegNumber);

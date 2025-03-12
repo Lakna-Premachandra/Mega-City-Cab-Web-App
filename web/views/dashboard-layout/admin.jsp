@@ -4,6 +4,8 @@
 <%@ page import="DAO.DriverDAO"%>
 <%@ page import="Models.Driver"%>
 <%@ page import="java.util.List"%>
+<%@ page import="Models.Vehicle" %>
+<%@ page import="DAO.VehicleDAO" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -428,7 +430,6 @@
                 </div>
             </div>
             
-            <!-- Drivers Management -->
             <div class="data-card" id="driversSection" style="display: none;">
                 <div class="data-card-header">
                     <h2>Drivers Management</h2>
@@ -452,27 +453,163 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <%
+                            try {
+                                DriverDAO driverDAO = new DriverDAO();
+                                List<Driver> driverList = driverDAO.getAllDrivers();
+                                
+                                for(Driver driver : driverList) {
+                            %>
                             <tr>
-                                <td>#DR-005</td>
-                                <td>James Wilson</td>
-                                <td>+92-321-5678901</td>
-                                <td>DL-12547896</td>
-                                <td>Ford Fusion (MNO-345)</td>
-                                <td>62</td>
-                                <td><span class="status-badge status-active">Active</span></td>
+                                <td><%= driver.getDriverId() %></td>
+                                <td><%= driver.getDriverName() %></td>
+                                <td><%= driver.getUsername() %></td>
+                                <td><%= driver.getPhoneNo() %></td>
+                                <td><%= driver.getEmail() %></td>
+                                <td><%= driver.getLicenseNumber() %></td>
+                                <td><%= driver.getCarModel() %> (<%= driver.getPlateNumber() %>)</td>
                                 <td>
                                     <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                                        <a href="#" class="action-btn edit" 
+                                           onclick="openEditModal(<%= driver.getDriverId() %>, '<%= driver.getDriverName() %>', '<%= driver.getPhoneNo() %>', '<%= driver.getEmail() %>', '<%= driver.getLicenseNumber() %>', <%= driver.getCarId() %>)">
+                                           <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/DriverServlet?action=delete&id=<%= driver.getDriverId() %>" 
+                                           class="action-btn delete" 
+                                           onclick="return confirm('Are you sure you want to delete this driver?');">
+                                           <i class="fas fa-trash"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
+                            <% 
+                                }
+                            } catch(Exception e) {
+                                out.println("<tr><td colspan='8'>Error retrieving driver data: " + e.getMessage() + "</td></tr>");
+                            }
+                            %>
                         </tbody>
-                    </table>
+                     </table>
+
+                         <!-- Add Driver Modal -->
+    <div id="addDriverModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Driver</h2>
+            <form action="${pageContext.request.contextPath}/DriverServlet" method="post">
+                <input type="hidden" name="action" value="add">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="driverName">Driver Name</label>
+                        <input type="text" id="driverName" name="driverName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNo">Phone Number</label>
+                        <input type="text" id="phoneNo" name="phoneNo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="licenseNumber">License Number</label>
+                        <input type="text" id="licenseNumber" name="licenseNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="carID">Assign Vehicle</label>
+                        <select id="carID" name="carID" required>
+                            <option value="">Select Vehicle</option>
+                            <%
+                            try {
+                                VehicleDAO vehicleDAO = new VehicleDAO();
+                                List<Vehicle> unassignedVehicles = vehicleDAO.getUnassignedVehicles();
+                                
+                                for(Vehicle vehicle : unassignedVehicles) {
+                            %>
+                            <option value="<%= vehicle.getCarId() %>"><%= vehicle.getModel() %> (<%= vehicle.getPlateNumber() %>)</option>
+                            <%
+                                }
+                            } catch(Exception e) {
+                                out.println("<option value=''>Error loading vehicles</option>");
+                            }
+                            %>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- Edit Driver Modal -->
+     <div id="editDriverModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Driver</h2>
+            <form action="${pageContext.request.contextPath}/DriverServlet" method="post">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" id="editDriverID" name="driverID">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="editDriverName">Driver Name</label>
+                        <input type="text" id="editDriverName" name="driverName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhoneNo">Phone Number</label>
+                        <input type="text" id="editPhoneNo" name="phoneNo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editLicenseNumber">License Number</label>
+                        <input type="text" id="editLicenseNumber" name="licenseNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCarID">Assign Vehicle</label>
+                        <select id="editCarID" name="carID" required>
+                            <option value="">Select Vehicle</option>
+                            <%
+                            try {
+                                VehicleDAO vehicleDAO = new VehicleDAO();
+                                List<Vehicle> allVehicles = vehicleDAO.getAllVehicles();
+                                
+                                for(Vehicle vehicle : allVehicles) {
+                            %>
+                            <option value="<%= vehicle.getCarId() %>"><%= vehicle.getModel() %> (<%= vehicle.getPlateNumber() %>)</option>
+                            <%
+                                }
+                            } catch(Exception e) {
+                                out.println("<option value=''>Error loading vehicles</option>");
+                            }
+                            %>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+                   
                 </div>
             </div>
             
-            <!-- Vehicles Management -->
             <div class="data-card" id="vehiclesSection" style="display: none;">
                 <div class="data-card-header">
                     <h2>Vehicles Management</h2>
@@ -496,43 +633,213 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <%
+                            try {
+                                VehicleDAO vehicleDAO = new VehicleDAO();
+                                List<Vehicle> vehicleList = vehicleDAO.getAllVehicles();
+                                
+                                for(Vehicle vehicle : vehicleList) {
+                                    String statusClass = vehicle.isAssigned() ? "status-assigned" : "status-unassigned";
+                            %>
                             <tr>
-                                <td>#VH-001</td>
-                                <td>Toyota Camry</td>
-                                <td>Premium</td>
-                                <td>ABC-123</td>
-                                <td>2023</td>
-                                <td>Michael Brown</td>
-                                <td><span class="status-badge status-active">Active</span></td>
+                                <td><%= vehicle.getCarId() %></td>
+                                <td><%= vehicle.getModel() %></td>
+                                <td><%= vehicle.getYear() %></td>
+                                <td><%= vehicle.getPlateNumber() %></td>
+                                <td><%= vehicle.getLicenseNumber() %></td>
+                                <td><%= vehicle.getVehicleType() %></td>
+                                <td><span class="status-badge <%= statusClass %>"><%= vehicle.isAssigned() ? "Assigned" : "Unassigned" %></span></td>
+                                <td><%= vehicle.isAssigned() ? vehicle.getDriverName() : "N/A" %></td>
                                 <td>
                                     <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
+                                        <a href="#" class="action-btn edit" 
+                                           onclick="openEditModal(<%= vehicle.getCarId() %>, '<%= vehicle.getModel() %>', <%= vehicle.getYear() %>, '<%= vehicle.getPlateNumber() %>', '<%= vehicle.getLicenseNumber() %>', '<%= vehicle.getVehicleType() %>')">
+                                           <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/VehicleServlet?action=delete&id=<%= vehicle.getCarId() %>" 
+                                           class="action-btn delete" 
+                                           onclick="return confirm('Are you sure you want to delete this vehicle?');">
+                                           <i class="fas fa-trash"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>#VH-002</td>
-                                <td>Honda Civic</td>
-                                <td>Economy</td>
-                                <td>DEF-456</td>
-                                <td>2022</td>
-                                <td>Jennifer Lee</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                            <% 
+                                }
+                            } catch(Exception e) {
+                                out.println("<tr><td colspan='9'>Error retrieving vehicle data: " + e.getMessage() + "</td></tr>");
+                            }
+                            %>
                         </tbody>
                     </table>
+                
+        
+            <!-- Add Vehicle Modal -->
+            <div id="addVehicleModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Add New Vehicle</h2>
+                    <form action="${pageContext.request.contextPath}/VehicleServlet" method="post">
+                        <input type="hidden" name="action" value="add">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="model">Model</label>
+                                <input type="text" id="model" name="model" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="year">Year</label>
+                                <input type="number" id="year" name="year" min="1900" max="2099" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="plateNumber">Plate Number</label>
+                                <input type="text" id="plateNumber" name="plateNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="licenseNumber">License Number</label>
+                                <input type="text" id="licenseNumber" name="licenseNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="vehicleType">Vehicle Type</label>
+                                <select id="vehicleType" name="vehicleType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Sedan">Sedan</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="Van">Van</option>
+                                    <option value="Luxury">Luxury</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeAddModal()">Cancel</button>
+                            <button type="submit" class="btn-primary">Add Vehicle</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
+        
+            <!-- Edit Vehicle Modal -->
+            <div id="editVehicleModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Edit Vehicle</h2>
+                    <form action="${pageContext.request.contextPath}/VehicleServlet" method="post">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" id="editCarID" name="carID">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="editModel">Model</label>
+                                <input type="text" id="editModel" name="model" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editYear">Year</label>
+                                <input type="number" id="editYear" name="year" min="1900" max="2099" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editPlateNumber">Plate Number</label>
+                                <input type="text" id="editPlateNumber" name="plateNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editLicenseNumber">License Number</label>
+                                <input type="text" id="editLicenseNumber" name="licenseNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editVehicleType">Vehicle Type</label>
+                                <select id="editVehicleType" name="vehicleType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Sedan">Sedan</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="Van">Van</option>
+                                    <option value="Luxury">Luxury</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                            <button type="submit" class="btn-primary">Update Vehicle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                        </div>
+            </div>
 
         <script>
+            // Get the modal elements
+        var addModal = document.getElementById("addDriverModal");
+        var editModal = document.getElementById("editDriverModal");
+        
+        // Get the button that opens the add modal
+        var addBtn = document.getElementById("addDriverBtn");
+        
+        // Get the <span> elements that close the modals
+        var spans = document.getElementsByClassName("close");
+        
+        // When the user clicks the button, open the modal
+        addBtn.onclick = function() {
+            addModal.style.display = "block";
+        }
+        
+        // When the user clicks on <span> (x), close the modals
+        for (var i = 0; i < spans.length; i++) {
+            spans[i].onclick = function() {
+                addModal.style.display = "none";
+                editModal.style.display = "none";
+            }
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == addModal) {
+                addModal.style.display = "none";
+            }
+            if (event.target == editModal) {
+                editModal.style.display = "none";
+            }
+        }
+        
+        // Function to close the add modal
+        function closeAddModal() {
+            addModal.style.display = "none";
+        }
+        
+        // Function to open the edit modal with driver data
+        function openEditModal(driverId, driverName, phoneNo, email, licenseNumber, carId) {
+            document.getElementById("editDriverID").value = driverId;
+            document.getElementById("editDriverName").value = driverName;
+            document.getElementById("editPhoneNo").value = phoneNo;
+            document.getElementById("editEmail").value = email;
+            document.getElementById("editLicenseNumber").value = licenseNumber;
+            document.getElementById("editCarID").value = carId;
+            
+            editModal.style.display = "block";
+        }
+
+                // Function to open the edit modal with vehicle data
+        function openEditModal(carId, model, year, plateNumber, licenseNumber, vehicleType) {
+            document.getElementById("editCarID").value = carId;
+            document.getElementById("editModel").value = model;
+            document.getElementById("editYear").value = year;
+            document.getElementById("editPlateNumber").value = plateNumber;
+            document.getElementById("editLicenseNumber").value = licenseNumber;
+            document.getElementById("editVehicleType").value = vehicleType;
+            
+            editModal.style.display = "block";
+        }
+        
+        // Function to close the edit modal
+        function closeEditModal() {
+            editModal.style.display = "none";
+        }
+        
+        // Auto-hide alert messages after 5 seconds
+        window.onload = function() {
+            var alertMessage = document.getElementById("alertMessage");
+            if (alertMessage) {
+                setTimeout(function() {
+                    alertMessage.style.display = "none";
+                }, 5000);
+            }
+        }
             // Function to show bookings section
             function showBookings() {
                 document.getElementById('bookingsSection').style.display = 'block';

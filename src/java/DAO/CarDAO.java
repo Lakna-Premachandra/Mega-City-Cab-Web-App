@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
-import Models.Car;
+import Models.Vehicle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ import java.sql.Statement;
 public class CarDAO {
     
     // Add a new car
-    public int addCar(Car car) throws SQLException, ClassNotFoundException {
+    public int addCar(Vehicle car) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -63,11 +63,11 @@ public class CarDAO {
     }
     
     // Get car by ID
-    public Car getCarById(int carId) throws SQLException, ClassNotFoundException {
+    public Vehicle getCarById(int carId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Car car = null;
+        Vehicle car = null;
         
         try {
             conn = DBConnection.getConnection();
@@ -79,7 +79,7 @@ public class CarDAO {
             rs = stmt.executeQuery();
             
             if (rs.next()) {
-                car = new Car();
+                car = new Vehicle();
                 car.setCarId(rs.getInt("carID"));
                 car.setModel(rs.getString("model"));
                 car.setYear(rs.getInt("year"));
