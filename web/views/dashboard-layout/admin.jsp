@@ -338,23 +338,17 @@
             <div class="dashboard-header">
                 <h1>Admin Dashboard</h1>
                 <div class="admin-profile">
-                    <img src="/api/placeholder/40/40" alt="Admin Profile">
                     <div class="admin-info">
-                        <h4>John Smith</h4>
-                        <p>Super Admin</p>
+                        <!--<h4>John Smith</h4>-->
+                         <a href="${pageContext.request.contextPath}/LogoutServlet" style="color: #6b7280; font-size: 16px;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
                     </div>
                 </div>
             </div>
             
             <!-- Bookings Section -->
             <div class="data-card" id="bookingsSection">
-                <div class="data-card-header">
-                    <h2>Recent Bookings</h2>
-                    <div class="data-card-buttons">
-                        <button class="btn btn-outline">View All</button>
-                        <button class="btn btn-primary">Export</button>
-                    </div>
-                </div>
                 
                 <div class="table-responsive">
                     <table>
@@ -379,49 +373,6 @@
                                 <td>Airport Terminal 3</td>
                                 <td>Michael Brown</td>
                                 <td><span class="status-badge status-active">Completed</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-002</td>
-                                <td>Robert Wilson</td>
-                                <td>03/08/2025, 10:30 AM</td>
-                                <td>456 Elm St</td>
-                                <td>Downtown Mall</td>
-                                <td>Jennifer Lee</td>
-                                <td><span class="status-badge status-active">Completed</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-003</td>
-                                <td>Emily Davis</td>
-                                <td>03/09/2025, 11:45 AM</td>
-                                <td>789 Oak St</td>
-                                <td>Central Station</td>
-                                <td>Unassigned</td>
-                                <td><span class="status-badge status-pending">Pending</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-eye"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-004</td>
-                                <td>William Taylor</td>
-                                <td>03/09/2025, 01:30 PM</td>
-                                <td>321 Pine St</td>
-                                <td>Sunshine Hotel</td>
-                                <td>David Chen</td>
-                                <td><span class="status-badge status-pending">In Progress</span></td>
                                 <td>
                                     <div class="table-actions">
                                         <button class="action-btn edit"><i class="fas fa-eye"></i></button>
@@ -454,7 +405,6 @@
                     <h2>Drivers Management</h2>
                     <div class="data-card-buttons">
                         <button class="btn btn-primary">Add New Driver</button>
-                        <button class="btn btn-outline">Export List</button>
                     </div>
                 </div>
                 
@@ -473,66 +423,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#DR-001</td>
-                                <td>Michael Brown</td>
-                                <td>+92-321-1234567</td>
-                                <td>DL-78452154</td>
-                                <td>Toyota Camry (ABC-123)</td>
-                                <td>126</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#DR-002</td>
-                                <td>Jennifer Lee</td>
-                                <td>+92-321-2345678</td>
-                                <td>DL-32154875</td>
-                                <td>Honda Civic (DEF-456)</td>
-                                <td>98</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#DR-003</td>
-                                <td>David Chen</td>
-                                <td>+92-321-3456789</td>
-                                <td>DL-95125478</td>
-                                <td>Hyundai Sonata (GHI-789)</td>
-                                <td>112</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#DR-004</td>
-                                <td>Maria Garcia</td>
-                                <td>+92-321-4567890</td>
-                                <td>DL-54789632</td>
-                                <td>Nissan Altima (JKL-012)</td>
-                                <td>85</td>
-                                <td><span class="status-badge status-inactive">Inactive</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
                             <tr>
                                 <td>#DR-005</td>
                                 <td>James Wilson</td>
@@ -559,7 +449,6 @@
                     <h2>Vehicles Management</h2>
                     <div class="data-card-buttons">
                         <button class="btn btn-primary">Add New Vehicle</button>
-                        <button class="btn btn-outline">Export List</button>
                     </div>
                 </div>
                 
@@ -600,51 +489,6 @@
                                 <td>DEF-456</td>
                                 <td>2022</td>
                                 <td>Jennifer Lee</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#VH-003</td>
-                                <td>Hyundai Sonata</td>
-                                <td>Premium</td>
-                                <td>GHI-789</td>
-                                <td>2024</td>
-                                <td>David Chen</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#VH-004</td>
-                                <td>Nissan Altima</td>
-                                <td>Economy</td>
-                                <td>JKL-012</td>
-                                <td>2023</td>
-                                <td>Maria Garcia</td>
-                                <td><span class="status-badge status-inactive">Maintenance</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit"><i class="fas fa-edit"></i></button>
-                                        <button class="action-btn delete"><i class="fas fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#VH-005</td>
-                                <td>Toyota Sienna</td>
-                                <td>Van</td>
-                                <td>MNO-345</td>
-                                <td>2022</td>
-                                <td>James Wilson</td>
                                 <td><span class="status-badge status-active">Active</span></td>
                                 <td>
                                     <div class="table-actions">

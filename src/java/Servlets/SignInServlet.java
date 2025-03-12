@@ -88,7 +88,7 @@ public class SignInServlet extends HttpServlet {
             
             // Send error message to the login page
             request.setAttribute("errorMessage", "An error occurred during login. Please try again.");
-            request.getRequestDispatcher("/sign-in/signIn.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/auth-layout/sign-in/signIn.jsp").forward(request, response);
         }
     }
 }

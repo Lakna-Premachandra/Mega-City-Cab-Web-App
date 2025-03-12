@@ -4,10 +4,16 @@
     Author     : PC
 --%>
 
+<%@page import="java.math.BigDecimal"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="DAO.LocationDAO"%>
 <%@ page import="Models.Location"%>
 <%@ page import="java.util.List"%>
+<%@ page import="DAO.LocationDistanceDAO"%>
+<%@ page import="DAO.VehiclePriceDAO"%>
+<%@ page import="Models.LocationDistance"%>
+<%@ page import="Models.VehiclePrice"%>
+<%@ page import="Models.User"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -105,6 +111,29 @@
                 color: white;
                 font-weight: 600;
             }
+            
+             #user-menu {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0 20px;
+                position: relative;
+            }
+
+            #user-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background-color: #ccc; 
+                margin-bottom: 5px;
+            }
+
+            #username span {
+                font-size: 14px;
+                color: #333;
+                font-weight: 600;
+            }
+
 
             /* Hero Section */
             .hero-section {
@@ -522,8 +551,47 @@
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
                 color: #9ca3af;
             }
+            .vehicle-option {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.vehicle-option:hover {
+    background-color: #f5f5f5;
+}
+
+.vehicle-option.selected {
+    background-color: #f0f8ff;
+    border: 2px solid #007bff;
+}
+
+.price-result {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.price-details {
+    margin-top: 10px;
+}
+
+.total-price {
+    font-size: 1.2em;
+    color: #0066cc;
+    margin-top: 10px;
+}
+
+.error {
+    color: red;
+}
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     </head>
     <body>
         <section id="header">
@@ -533,8 +601,23 @@
                     <li><a href="">Home</a></li>
                     <li><a href="./views/main-layout/Services.jsp">Services</a></li>
                     <li><a href="./views/main-layout/helpPage.jsp">Help</a></li>
-                    <li><a href="./views/auth-layout/sign-in/signIn.jsp">Sign In</a></li>
-                    <button id="booknow"><a class='booknow' href="contact.html">Contact Us</a></button>
+                    <% 
+            HttpSession userSession = request.getSession(false);
+            User user = (userSession != null) ? (User)userSession.getAttribute("user") : null;
+            
+           if(user == null) { 
+            %>
+                <button id="booknow"><a class='booknow' href="./views/auth-layout/sign-in/signIn.jsp">Sign In</a></button>
+            <% } else { %>
+                <button id="booknow"><a href="LogoutServlet">Log Out</a></button>
+                <li id="user-menu">
+                    <i class="fa-solid fa-user" id="user-icon"></i>
+                    <div id="username">
+                        <span><%= user.getUsername() %></span> 
+                    </div>
+                </li>
+            <% } %>
+            
                 </ul>
             </div>
         </section>
@@ -558,43 +641,41 @@
         <h3 class="form-label">Select Vehicle Type</h3>
         <div class="vehicle-options">
             <div class="vehicle-option" onclick="selectVehicle('economy')">
-                <img src="/api/placeholder/120/60" alt="Economy Car">
                 <h4>Economy</h4>
                 <p>Up to 4 passengers</p>
                 <p class="price-info">Rs. 60/km + Rs. 150 base</p>
             </div>
             <div class="vehicle-option" onclick="selectVehicle('premium')">
-                <img src="/api/placeholder/120/60" alt="Premium Car">
                 <h4>Premium</h4>
                 <p>Up to 4 passengers</p>
                 <p class="price-info">Rs. 80/km + Rs. 200 base</p>
             </div>
             <div class="vehicle-option" onclick="selectVehicle('suv')">
-                <img src="/api/placeholder/120/60" alt="SUV">
                 <h4>SUV</h4>
                 <p>Up to 6 passengers</p>
                 <p class="price-info">Rs. 100/km + Rs. 250 base</p>
             </div>
             <div class="vehicle-option" onclick="selectVehicle('van')">
-                <img src="/api/placeholder/120/60" alt="Van">
                 <h4>Van</h4>
                 <p>Up to 12 passengers</p>
                 <p class="price-info">Rs. 120/km + Rs. 300 base</p>
             </div>
         </div>
-        <input type="hidden" id="vehicleType" name="vehicleType" value="">
+        <!--<input type="hidden" id="vehicleType" name="vehicleType" value="">-->
 
         <form id="bookingForm">
+                    <input type="hidden" id="vehicleType" name="vehicleType" value="">
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="name" class="form-label">Full Name</label>
-                    <input type="text" id="name" class="form-control" placeholder="Enter your full name">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name">
                     <span id="nameError" class="error-message"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="mobile" class="form-label">Mobile Number</label>
-                    <input type="text" id="mobile" class="form-control" placeholder="Enter your mobile number">
+                    <input type="text" id="mobile" name="mobile" class="form-control" placeholder="Enter your mobile number">
                     <span id="mobileError" class="error-message"></span>
                 </div>
             </div>
@@ -602,44 +683,42 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="date" class="form-label">Pickup Date</label>
-                    <input type="date" id="date" class="form-control">
+                    <input type="date" id="date" name="date" class="form-control">
                     <span id="dateError" class="error-message"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="time" class="form-label">Pickup Time</label>
-                    <input type="time" id="time" class="form-control">
+                    <input type="time" id="time" name="time" class="form-control">
                     <span id="timeError" class="error-message"></span>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="pickup" class="form-label">Pickup Location</label>
-           <select id="pickupLocation" name="pickupLocation" class="form-control" required>
-                                <option value="">Select Pickup Location</option>
-                                <% 
-                                LocationDAO locationDAO = new LocationDAO();
-                                List<Location> locations = locationDAO.getAllLocations();
-                                
-                                for(Location location : locations) {
-                                %>
-                                    <option value="<%= location.getLocationID() %>"><%= location.getLocationName() %></option>
-                                <% } %>
-                            </select>
+                    <label for="pickupLocation" class="form-label">Pickup Location</label>
+                    <select id="pickupLocation" name="pickupLocation" class="form-control" required>
+                        <option value="">Select Pickup Location</option>
+                        <% 
+                        LocationDAO locationDAO = new LocationDAO();
+                        List<Location> locations = locationDAO.getAllLocations();
 
+                        for(Location location : locations) {
+                        %>
+                            <option value="<%= location.getLocationID() %>"><%= location.getLocationName() %></option>
+                        <% } %>
+                    </select>
                     <span id="pickupError" class="error-message"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="drop" class="form-label">Drop Location</label>
-  <select id="dropLocation" name="dropLocation" class="form-control" required>
-                                <option value="">Select Drop Location</option>
-                                <% for(Location location : locations) { %>
-                                    <option value="<%= location.getLocationID() %>"><%= location.getLocationName() %></option>
-                                <% } %>
-                            </select>
-
+                    <label for="dropLocation" class="form-label">Drop Location</label>
+                    <select id="dropLocation" name="dropLocation" class="form-control" required>
+                        <option value="">Select Drop Location</option>
+                        <% for(Location location : locations) { %>
+                            <option value="<%= location.getLocationID() %>"><%= location.getLocationName() %></option>
+                        <% } %>
+                    </select>
                     <span id="dropError" class="error-message"></span>
                 </div>
             </div>
@@ -647,7 +726,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="passengers" class="form-label">Number of Passengers</label>
-                    <select id="passengers" class="form-control">
+                    <select id="passengers" name="passengers" class="form-control">
                         <option value="1">1 passenger</option>
                         <option value="2">2 passengers</option>
                         <option value="3">3 passengers</option>
@@ -659,7 +738,7 @@
 
                 <div class="form-group">
                     <label for="address" class="form-label">Your Address</label>
-                    <input type="text" id="address" class="form-control" placeholder="Enter your address">
+                    <input type="text" id="address" name="address" class="form-control" placeholder="Enter your address">
                     <span id="addressError" class="error-message"></span>
                 </div>
             </div>
@@ -667,7 +746,7 @@
             <div class="form-row">
                 <div class="form-group" style="flex-basis: 100%;">
                     <label for="notes" class="form-label">Special Instructions (Optional)</label>
-                    <textarea id="notes" class="form-control" rows="3" placeholder="Any special requests or instructions for your driver"></textarea>
+                    <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Any special requests or instructions for your driver"></textarea>
                 </div>
             </div>
 
@@ -691,6 +770,19 @@
                     </div>
                 </div>
             </div>
+                        
+            <div id="priceCalculationResult"></div>
+
+            <!-- Add hidden fields to store calculation results for booking -->
+            <input type="hidden" id="calculatedDistance" name="calculatedDistance" value="">
+            <input type="hidden" id="calculatedBasePrice" name="calculatedBasePrice" value="">
+            <input type="hidden" id="calculatedDistanceCost" name="calculatedDistanceCost" value="">
+            <input type="hidden" id="calculatedTotalPrice" name="calculatedTotalPrice" value="">
+            <input type="hidden" id="fromLocationID" name="fromLocationID" value="">
+            <input type="hidden" id="toLocationID" name="toLocationID" value="">
+            <!-- Include email and NIC fields that will be needed for customer record -->
+            <input type="hidden" id="email" name="email" value="customer@example.com">
+            <input type="hidden" id="nic" name="nic" value="NIC12345">
 
             <button type="button" class="submit-btn" onclick="validateForm()">BOOK NOW</button>
         </form>
@@ -785,223 +877,299 @@
             </div>
         </footer>
 
-        <script>
-let locations = [];
-let selectedVehicleType = '';
-let basePrice = 0;
-let pricePerKm = 0;
+      <script>
+              // Global variables to store data
+    let selectedVehicleType = '';
+    let distancesList = [];
+    let pricesList = [];
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadLocations();
-    
-    document.getElementById('pickup').addEventListener('change', calculatePriceIfPossible);
-    document.getElementById('drop').addEventListener('change', calculatePriceIfPossible);
-});
-
-function loadLocations() {
-    fetch('getLocations')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            locations = data;
-            
-            const pickupSelect = document.getElementById('pickup');
-            const dropSelect = document.getElementById('drop');
-            
-            while (pickupSelect.options.length > 1) {
-                pickupSelect.remove(1);
-            }
-            
-            while (dropSelect.options.length > 1) {
-                dropSelect.remove(1);
-            }
-            
-            locations.forEach(location => {
-                const pickupOption = document.createElement('option');
-                pickupOption.value = location.locationID;
-                pickupOption.textContent = location.locationName;
-                pickupSelect.appendChild(pickupOption);
-                
-                const dropOption = document.createElement('option');
-                dropOption.value = location.locationID;
-                dropOption.textContent = location.locationName;
-                dropSelect.appendChild(dropOption);
-            });
-        })
-        .catch(error => {
-            console.error('Error loading locations:', error);
-            alert('Failed to load locations. Please refresh the page or try again later.');
-        });
-}
-
-function selectVehicle(vehicleType) {
-    document.getElementById('vehicleType').value = vehicleType;
-    selectedVehicleType = vehicleType;
-    
-    // Update visual selection
-    const options = document.querySelectorAll('.vehicle-option');
-    options.forEach(option => {
-        option.classList.remove('selected');
-    });
-    
-    event.currentTarget.classList.add('selected');
-    
-    switch(vehicleType) {
-        case 'economy':
-            basePrice = 150;
-            pricePerKm = 60;
-            break;
-        case 'premium':
-            basePrice = 200;
-            pricePerKm = 80;
-            break;
-        case 'suv':
-            basePrice = 250;
-            pricePerKm = 100;
-            break;
-        case 'van':
-            basePrice = 300;
-            pricePerKm = 120;
-            break;
-    }
-    
-    document.getElementById('base-price').textContent = `Rs. ${basePrice.toFixed(2)}`;
-    
-    calculatePriceIfPossible();
-}
-
-function calculatePriceIfPossible() {
-    const pickupId = document.getElementById('pickup').value;
-    const dropId = document.getElementById('drop').value;
-    
-    if (pickupId && dropId && selectedVehicleType) {
-        calculatePrice(pickupId, dropId);
-    }
-}
-
-function calculatePrice(fromLocationId, toLocationId) {
-    document.getElementById('distance-value').textContent = 'Calculating...';
-    document.getElementById('distance-cost').textContent = 'Calculating...';
-    document.getElementById('total-price').textContent = 'Calculating...';
-    
-    fetch(`calculatePrice?fromLocationId=${fromLocationId}&toLocationId=${toLocationId}&vehicleType=${selectedVehicleType}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                document.getElementById('distance-value').textContent = `${data.distance.toFixed(2)} km`;
-                
-                document.getElementById('base-price').textContent = `Rs. ${data.basePrice.toFixed(2)}`;
-                
-                document.getElementById('distance-cost').textContent = `Rs. ${data.distanceCost.toFixed(2)}`;
-                
-                document.getElementById('total-price').textContent = data.formattedPrice;
-            } else {
-                document.getElementById('distance-value').textContent = 'N/A';
-                document.getElementById('distance-cost').textContent = 'N/A';
-                document.getElementById('total-price').textContent = 'Route not available';
-                
-                alert(data.error || 'Route not available between the selected locations.');
-            }
-        })
-        .catch(error => {
-            console.error('Error calculating price:', error);
-            
-            // Reset displays
-            document.getElementById('distance-value').textContent = 'Error';
-            document.getElementById('distance-cost').textContent = 'Error';
-            document.getElementById('total-price').textContent = 'Error';
-            
-            alert('Failed to calculate price. Please try again later.');
-        });
-}
-
-function validateForm() {
-    const name = document.getElementById('name');
-    const date = document.getElementById('date');
-    const time = document.getElementById('time');
-    const pickup = document.getElementById('pickup');
-    const drop = document.getElementById('drop');
-    const mobile = document.getElementById('mobile');
-    const address = document.getElementById('address');
-    const vehicleType = document.getElementById('vehicleType');
-
-    const nameError = document.getElementById('nameError');
-    const dateError = document.getElementById('dateError');
-    const timeError = document.getElementById('timeError');
-    const pickupError = document.getElementById('pickupError');
-    const dropError = document.getElementById('dropError');
-    const mobileError = document.getElementById('mobileError');
-    const addressError = document.getElementById('addressError');
-
-    nameError.textContent = '';
-    nameError.style.display = 'none';
-    dateError.textContent = '';
-    dateError.style.display = 'none';
-    timeError.textContent = '';
-    timeError.style.display = 'none';
-    pickupError.textContent = '';
-    pickupError.style.display = 'none';
-    dropError.textContent = '';
-    dropError.style.display = 'none';
-    mobileError.textContent = '';
-    mobileError.style.display = 'none';
-    addressError.textContent = '';
-    addressError.style.display = 'none';
-
-    let isValid = true;
-
-    if (name.value.trim() === '') {
-        nameError.textContent = 'Full name is required';
-        nameError.style.display = 'block';
-        isValid = false;
-    }
-
-    if (date.value.trim() === '') {
-        dateError.textContent = 'Pickup date is required';
-        dateError.style.display = 'block';
-        isValid = false;
-    } else {
-        // Validate date is not in the past
-        const selectedDate = new Date(date.value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+    // Initialize data when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the data
+        loadDistanceData();
+        loadPriceData();
         
-        if (selectedDate < today) {
-            dateError.textContent = 'Please select a future date';
-            dateError.style.display = 'block';
-            isValid = false;
+        // Set up event listeners
+        document.getElementById('pickupLocation').addEventListener('change', function() {
+            document.getElementById('pickupError').innerText = '';
+            if (selectedVehicleType && document.getElementById('dropLocation').value) {
+                calculatePrice();
+            }
+        });
+
+        document.getElementById('dropLocation').addEventListener('change', function() {
+            document.getElementById('dropError').innerText = '';
+            if (selectedVehicleType && document.getElementById('pickupLocation').value) {
+                calculatePrice();
+            }
+        });
+    });
+
+    // Load distance data
+    function loadDistanceData() {
+        <%
+        List<LocationDistance> distances = (List<LocationDistance>) request.getAttribute("distancesList");
+        if (distances != null) {
+            for (LocationDistance distance : distances) {
+        %>
+            distancesList.push({
+                fromLocationID: <%= distance.getFromLocationID() %>,
+                toLocationID: <%= distance.getToLocationID() %>,
+                distanceKM: <%= distance.getDistanceKM() %>
+            });
+        <%
+            }
         }
-    }
-    
-    if (time.value.trim() === '') {
-        timeError.textContent = 'Pickup time is required';
-        timeError.style.display = 'block';
-        isValid = false;
+        %>
+        console.log("Loaded " + distancesList.length + " distance records");
     }
 
-    if (pickup.value.trim() === '') {
-        pickupError.textContent = 'Pickup location is required';
-        pickupError.style.display = 'block';
-        isValid = false;
+    // Load price data
+    function loadPriceData() {
+        <%
+        List<VehiclePrice> prices = (List<VehiclePrice>) request.getAttribute("pricesList");
+        if (prices != null) {
+            for (VehiclePrice price : prices) {
+        %>
+            pricesList.push({
+                vehicleType: "<%= price.getVehicleType() %>",
+                pricePerKM: <%= price.getPricePerKM() %>,
+                basePrice: <%= price.getBasePrice() %>
+            });
+        <%
+            }
+        }
+        %>
+        console.log("Loaded " + pricesList.length + " price records");
     }
 
-    if (drop.value.trim() === '') {
-        dropError.textContent = 'Drop location is required';
-        dropError.style.display = 'block';
-        isValid = false;
-    }
+        // Select a vehicle
+        function selectVehicle(vehicleType) {
+            // Highlight the selected vehicle
+            const options = document.querySelectorAll('.vehicle-option');
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Update the hidden input
+            document.getElementById('vehicleType').value = vehicleType;
+            selectedVehicleType = vehicleType;
+            
+            console.log("Selected vehicle: " + selectedVehicleType);
+            
+            // Calculate price if both locations are also selected
+            const pickupLocationId = document.getElementById('pickupLocation').value;
+            const dropLocationId = document.getElementById('dropLocation').value;
+            
+            if (pickupLocationId && dropLocationId) {
+                calculatePrice();
+            }
+        }
 
-    if (mobile.value.trim() === '') {
-        mobileError.textContent = 'Mobile number is required';
-        </script>
+        // Calculate price based on selected locations and vehicle type
+        function calculatePrice() {
+            const pickupLocationId = parseInt(document.getElementById('pickupLocation').value);
+            const dropLocationId = parseInt(document.getElementById('dropLocation').value);
+            
+            // Validate inputs
+            if (!pickupLocationId || !dropLocationId || !selectedVehicleType) {
+                console.log("Missing data for calculation", {
+                    pickup: pickupLocationId,
+                    drop: dropLocationId,
+                    vehicle: selectedVehicleType
+                });
+                return;
+            }
+            
+            // Check if pickup and drop are the same
+            if (pickupLocationId === dropLocationId) {
+                document.getElementById('dropError').innerText = 'Pickup and drop locations cannot be the same';
+                clearPriceDisplay();
+                return;
+            } else {
+                document.getElementById('dropError').innerText = '';
+            }
+            
+            // Find distance between locations
+            let distance = 0;
+            for (let i = 0; i < distancesList.length; i++) {
+                if ((distancesList[i].fromLocationID === pickupLocationId && 
+                     distancesList[i].toLocationID === dropLocationId) ||
+                    (distancesList[i].fromLocationID === dropLocationId && 
+                     distancesList[i].toLocationID === pickupLocationId)) {
+                    distance = distancesList[i].distanceKM;
+                    break;
+                }
+            }
+            
+            if (distance === 0) {
+                document.getElementById('priceCalculationResult').innerHTML = 
+                    '<p class="error">Distance not found between selected locations</p>';
+                clearPriceDisplay();
+                return;
+            }
+            
+            // Find vehicle price details
+            let vehiclePrice = null;
+            for (let i = 0; i < pricesList.length; i++) {
+                if (pricesList[i].vehicleType.toLowerCase() === selectedVehicleType.toLowerCase()) {
+                    vehiclePrice = pricesList[i];
+                    break;
+                }
+            }
+            
+            if (!vehiclePrice) {
+                // If we can't find the price in the database, use hardcoded values
+                // based on the vehicle selection UI
+                switch(selectedVehicleType.toLowerCase()) {
+                    case 'economy':
+                        vehiclePrice = { pricePerKM: 60, basePrice: 150 };
+                        break;
+                    case 'premium':
+                        vehiclePrice = { pricePerKM: 80, basePrice: 200 };
+                        break;
+                    case 'suv':
+                        vehiclePrice = { pricePerKM: 100, basePrice: 250 };
+                        break;
+                    case 'van':
+                        vehiclePrice = { pricePerKM: 120, basePrice: 300 };
+                        break;
+                    default:
+                        document.getElementById('priceCalculationResult').innerHTML = 
+                            '<p class="error">Price details not found for selected vehicle</p>';
+                        clearPriceDisplay();
+                        return;
+                }
+            }
+            
+            // Calculate costs
+            const basePrice = vehiclePrice.basePrice;
+            const distanceCost = distance * vehiclePrice.pricePerKM;
+            const totalPrice = basePrice + distanceCost;
+            
+            // Display the results
+            document.getElementById('distance-value').textContent = distance.toFixed(2) + ' km';
+            document.getElementById('base-price').textContent = 'Rs. ' + basePrice.toFixed(2);
+            document.getElementById('distance-cost').textContent = 'Rs. ' + distanceCost.toFixed(2);
+            document.getElementById('total-price').textContent = 'Rs. ' + totalPrice.toFixed(2);
+            
+            // Store values in hidden fields for form submission
+            document.getElementById('calculatedDistance').value = distance;
+            document.getElementById('calculatedBasePrice').value = basePrice;
+            document.getElementById('calculatedDistanceCost').value = distanceCost;
+            document.getElementById('calculatedTotalPrice').value = totalPrice;
+            document.getElementById('fromLocationID').value = pickupLocationId;
+            document.getElementById('toLocationID').value = dropLocationId;
+            
+            // Clear any previous calculation errors
+            document.getElementById('priceCalculationResult').innerHTML = '';
+        }
+
+        // Clear price display values
+        function clearPriceDisplay() {
+            document.getElementById('distance-value').textContent = '0.00 km';
+            document.getElementById('base-price').textContent = 'Rs. 0.00';
+            document.getElementById('distance-cost').textContent = 'Rs. 0.00';
+            document.getElementById('total-price').textContent = 'Rs. 0.00';
+            
+            // Clear hidden fields
+            document.getElementById('calculatedDistance').value = '';
+            document.getElementById('calculatedBasePrice').value = '';
+            document.getElementById('calculatedDistanceCost').value = '';
+            document.getElementById('calculatedTotalPrice').value = '';
+        }
+
+        // Validation function
+        function validateForm() {
+            let isValid = true;
+            
+            // Check if a vehicle type is selected
+            if (!document.getElementById('vehicleType').value) {
+                alert('Please select a vehicle type');
+                isValid = false;
+                return;
+            }
+            
+            // Check the name field
+            const name = document.getElementById('name').value;
+            if (!name) {
+                document.getElementById('nameError').innerText = 'Name is required';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').innerText = '';
+            }
+            
+            // Check the mobile field
+            const mobile = document.getElementById('mobile').value;
+            if (!mobile) {
+                document.getElementById('mobileError').innerText = 'Mobile number is required';
+                isValid = false;
+            } else if (!/^[0-9]{10}$/.test(mobile)) {
+                document.getElementById('mobileError').innerText = 'Invalid mobile number';
+                isValid = false;
+            } else {
+                document.getElementById('mobileError').innerText = '';
+            }
+            
+            // Check date and time
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            
+            if (!date) {
+                document.getElementById('dateError').innerText = 'Date is required';
+                isValid = false;
+            } else {
+                document.getElementById('dateError').innerText = '';
+            }
+            
+            if (!time) {
+                document.getElementById('timeError').innerText = 'Time is required';
+                isValid = false;
+            } else {
+                document.getElementById('timeError').innerText = '';
+            }
+            
+            // Check pickup and drop locations
+            const pickup = document.getElementById('pickupLocation').value;
+            const drop = document.getElementById('dropLocation').value;
+            
+            if (!pickup) {
+                document.getElementById('pickupError').innerText = 'Pickup location is required';
+                isValid = false;
+            } else {
+                document.getElementById('pickupError').innerText = '';
+            }
+            
+            if (!drop) {
+                document.getElementById('dropError').innerText = 'Drop location is required';
+                isValid = false;
+            } else {
+                document.getElementById('dropError').innerText = '';
+            }
+            
+            // Check if pickup and drop are the same
+            if (pickup && drop && pickup === drop) {
+                document.getElementById('dropError').innerText = 'Pickup and drop locations cannot be the same';
+                isValid = false;
+            }
+            
+            // Check address
+            const address = document.getElementById('address').value;
+            if (!address) {
+                document.getElementById('addressError').innerText = 'Address is required';
+                isValid = false;
+            } else {
+                document.getElementById('addressError').innerText = '';
+            }
+            
+            if (isValid) {
+                // If all validations pass, submit the form
+                document.getElementById('bookingForm').action = "BookingServlet";
+                document.getElementById('bookingForm').method = "POST";
+                document.getElementById('bookingForm').submit();
+            }
+        }
+    </script>
     </body>
 </html>

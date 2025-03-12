@@ -1,3 +1,6 @@
+<%@page import="DAO.BookingDAO"%>
+<%@page import="Models.Booking"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -459,7 +462,7 @@
         </style>
     </head>
     <body>
-        <!-- Sidebar -->
+         Sidebar 
         <div class="sidebar">
             <div class="sidebar-logo">
                 <img src="/api/placeholder/50/50" alt="Mega City Cab">
@@ -468,17 +471,12 @@
             
             <ul class="sidebar-menu">
                 <li><a class="active"><i class="fas fa-taxi"></i> <span>My Bookings</span></a></li>
-                <li><a><i class="fas fa-history"></i> <span>Trip History</span></a></li>
-                <li><a><i class="fas fa-dollar-sign"></i> <span>Earnings</span></a></li>
-                <li><a><i class="fas fa-star"></i> <span>Ratings</span></a></li>
                 <li><a><i class="fas fa-user-cog"></i> <span>My Account</span></a></li>
-                <li><a><i class="fas fa-question-circle"></i> <span>Support</span></a></li>
             </ul>
         </div>
         
-        <!-- Main Content -->
+         Main Content 
         <div class="main-content">
-            <!-- Dashboard Header -->
             <div class="dashboard-header">
                 <div class="header-left">
                     <h1>Driver Dashboard</h1>
@@ -492,56 +490,19 @@
                     </div>
                 </div>
                 <div class="driver-profile">
-                    <img src="/api/placeholder/40/40" alt="Driver Profile">
                     <div class="driver-info">
-                        <h4>David Chen</h4>
-                        <p>Driver ID: #DR-003</p>
+                        <!--<h4>David Chen</h4>-->
+                        <a href="${pageContext.request.contextPath}/LogoutServlet" style="color: #6b7280; font-size: 12px;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
                     </div>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="stats-container">
-                <div class="stat-card">
-                    <span class="stat-card-title">Today's Earnings</span>
-                    <span class="stat-card-value">$85.50</span>
-                    <span class="stat-card-change positive">
-                        <i class="fas fa-arrow-up"></i> $12.30 from yesterday
-                    </span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-card-title">Completed Trips</span>
-                    <span class="stat-card-value">5</span>
-                    <span class="stat-card-change positive">
-                        <i class="fas fa-arrow-up"></i> 2 more than yesterday
-                    </span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-card-title">Average Rating</span>
-                    <span class="stat-card-value">4.8 <i class="fas fa-star" style="color: #f59e0b; font-size: 18px;"></i></span>
-                    <span class="stat-card-change">
-                        Based on last 50 rides
-                    </span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-card-title">Acceptance Rate</span>
-                    <span class="stat-card-value">92%</span>
-                    <span class="stat-card-change negative">
-                        <i class="fas fa-arrow-down"></i> 3% from last week
-                    </span>
                 </div>
             </div>
             
-            <!-- Bookings Section -->
+             Bookings Section 
             <div class="data-card">
                 <div class="data-card-header">
                     <h2>Available Bookings</h2>
-                    <div class="data-card-filters">
-                        <button class="filter-btn active">All</button>
-                        <button class="filter-btn">New Requests</button>
-                        <button class="filter-btn">Accepted</button>
-                        <button class="filter-btn">Completed</button>
-                    </div>
                 </div>
                 
                 <div class="table-responsive">
@@ -559,93 +520,73 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#BK-003</td>
-                                <td>Emily Davis</td>
-                                <td>11:45 AM Today</td>
-                                <td>789 Oak St</td>
-                                <td>Central Station</td>
-                                <td>$18.50</td>
-                                <td><span class="status-badge status-new">New Request</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn accept"><i class="fas fa-check"></i> Accept</button>
-                                        <button class="action-btn reject"><i class="fas fa-times"></i> Reject</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-005</td>
-                                <td>Olivia Martin</td>
-                                <td>03:00 PM Today</td>
-                                <td>654 Maple St</td>
-                                <td>Grand Theater</td>
-                                <td>$12.75</td>
-                                <td><span class="status-badge status-new">New Request</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn accept"><i class="fas fa-check"></i> Accept</button>
-                                        <button class="action-btn reject"><i class="fas fa-times"></i> Reject</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-004</td>
-                                <td>William Taylor</td>
-                                <td>01:30 PM Today</td>
-                                <td>321 Pine St</td>
-                                <td>Sunshine Hotel</td>
-                                <td>$22.00</td>
-                                <td><span class="status-badge status-accepted">Accepted</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn details"><i class="fas fa-info-circle"></i> Details</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-001</td>
-                                <td>Sarah Johnson</td>
-                                <td>09:15 AM Today</td>
-                                <td>123 Main St</td>
-                                <td>Airport Terminal 3</td>
-                                <td>$35.50</td>
-                                <td><span class="status-badge status-completed">Completed</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn details"><i class="fas fa-info-circle"></i> Details</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-002</td>
-                                <td>Robert Wilson</td>
-                                <td>10:30 AM Today</td>
-                                <td>456 Elm St</td>
-                                <td>Downtown Mall</td>
-                                <td>$15.75</td>
-                                <td><span class="status-badge status-completed">Completed</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn details"><i class="fas fa-info-circle"></i> Details</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#BK-006</td>
-                                <td>James Anderson</td>
-                                <td>04:15 PM Today</td>
-                                <td>987 Cedar Rd</td>
-                                <td>City Hospital</td>
-                                <td>$28.50</td>
-                                <td><span class="status-badge status-rejected">Rejected</span></td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn details"><i class="fas fa-info-circle"></i> Details</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+                            <%
+                                try {
+                                    List<Booking> bookings = BookingDAO.getAllBookings();
+                                    for(Booking booking : bookings) {
+                                        String status = booking.getStatus().toLowerCase();
+                            %>
+                                <tr>
+                                    <td>#<%= booking.getBookingID() %></td>
+                                    <td><%= booking.getCustomerID() %></td>
+                                    <td><%= booking.getBookingDateTime() %></td>
+                                    <td><%= booking.getStartDestination() %></td>
+                                    <td><%= booking.getEndDestination() %></td>
+                                    <td>$<%= String.format("%.2f", booking.getAmount()) %></td>
+                                    <td>
+                                        <% 
+                                            String statusClass = "";
+                                            
+                                            if(status.equals("new") || status.equals("pending")) {
+                                                statusClass = "status-pending";
+                                            } else if(status.equals("approved")) {
+                                                statusClass = "status-approved";
+                                            } else if(status.equals("completed")) {
+                                                statusClass = "status-completed";
+                                            } else if(status.equals("cancelled")) {
+                                                statusClass = "status-cancelled";
+                                            }
+                                        %>
+                                        <span class="status-badge <%= statusClass %>"><%= booking.getStatus() %></span>
+                                    </td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <% if(status.equals("new") || status.equals("pending")) { %>
+                                                <form action="<%= request.getContextPath()%>/UpdateBookingStatusServlet" method="post" class="inline-form">
+                                                    <input type="hidden" name="bookingId" value="<%= booking.getBookingID() %>">
+                                                    <input type="hidden" name="status" value="approved">
+                                                    <button type="submit" class="action-btn approve">
+                                                        <i class="fas fa-check-circle"></i> Approve
+                                                    </button>
+                                                </form>
+                                            <% } else if(status.equals("approved")) { %>
+                                                <form action="<%= request.getContextPath()%>/UpdateBookingStatusServlet" method="post" class="inline-form">
+                                                    <input type="hidden" name="bookingId" value="<%= booking.getBookingID() %>">
+                                                    <input type="hidden" name="status" value="completed">
+                                                    <button type="submit" class="action-btn complete">
+                                                        <i class="fas fa-flag-checkered"></i> Complete
+                                                    </button>
+                                                </form>
+                                                <form action="<%= request.getContextPath()%>/UpdateBookingStatusServlet" method="post" class="inline-form">
+                                                    <input type="hidden" name="bookingId" value="<%= booking.getBookingID() %>">
+                                                    <input type="hidden" name="status" value="pending">
+                                                    <button type="submit" class="action-btn cancel">
+                                                        <i class="fas fa-times-circle"></i> Cancel
+                                                    </button>
+                                                </form>
+                                            <% } else if(status.equals("completed") || status.equals("cancelled")) { %>
+                                                <span class="action-text">No actions available</span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <%
+                                    }
+                                } catch(Exception e) {
+                                    out.println("<tr><td colspan='8'>Error: " + e.getMessage() + "</td></tr>");
+                                }
+                            %>
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -708,3 +649,4 @@
         </script>
     </body>
 </html>
+
