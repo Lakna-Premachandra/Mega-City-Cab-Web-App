@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.URLEncoder;
 import java.util.Calendar;
 
 /**
@@ -55,8 +56,14 @@ public class DriverSignUpServlet extends HttpServlet {
 
             // First check if username already exists
             if (userDAO.checkUsernameExists(username)) {
-                request.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
-                request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+//                request.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
+//                request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+                
+                
+                 HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
+                String errorMessage = "Username already exists. Please choose a different username.";
+                response.sendRedirect("views/auth-layout/sign-up/DriverSignUp.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
                 return;
             }
 

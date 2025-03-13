@@ -188,6 +188,12 @@
 
             <div class="form-container">
                 <div class="form-content">
+                    <% if (session.getAttribute("errorMessage") != null) {%>
+                    <div class="errorMessage_login_cred" id="errorMessage" style="color: red; margin-bottom: 15px; text-align: center;">
+                        <%= session.getAttribute("errorMessage")%>
+                    </div>
+                    <% session.removeAttribute("errorMessage"); %>
+                    <% }%>
                     <div class="form-header">
                         <h2 class="form-title">Driver Sign Up</h2>
                         <p class="form-subtitle">Create an account to join our team of professional drivers.</p>

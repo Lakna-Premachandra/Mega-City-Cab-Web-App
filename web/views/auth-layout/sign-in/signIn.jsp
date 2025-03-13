@@ -261,9 +261,16 @@
             <div class="image-container">
                 <div class="logo">Megacity Cab</div>
             </div>
+        
 
             <div class="form-container">
                 <div class="form-content">
+                        <% if (session.getAttribute("errorMessage") != null) { %>
+                <div class="errorMessage_login_cred" id="errorMessage" style="color: red; margin-bottom: 15px; text-align: center;">
+                    <%= session.getAttribute("errorMessage") %>
+                </div>
+                <% session.removeAttribute("errorMessage"); %>
+            <% } %>
                     <div class="form-header">
                         <h2 class="form-title">Sign in with your account</h2>
                         <p class="form-subtitle">Create an account to book your vehicle tickets seamlessly.</p>
@@ -285,24 +292,24 @@
                             </div>
                         </div>
 
-                        <div class="checkbox-container">
+<!--                        <div class="checkbox-container">
                             <input type="checkbox" id="remember" class="form-checkbox">
                             <label for="remember">Keep me signed in</label>
                             <a href="#" class="forgot-password">Reset password</a>
-                        </div>
+                        </div>-->
 
                            <!--<input type="submit" class="submit-button"value="submit"/>-->
                             <button type="submit" class="submit-button">Sign In</button>
 
-                        <div class="divider">or</div>
+                        <div class="divider"></div>
 
-                        <a href="#" class="social-button facebook-button">
+<!--                        <a href="#" class="social-button facebook-button">
                             Continue with Facebook
                         </a>
 
                         <a href="#" class="social-button google-button">
                             Continue with Google
-                        </a>
+                        </a>-->
 
                         <div class="signup-link">
                             Create your account? <a href="../sign-up/signUp.jsp">Sign Up</a>

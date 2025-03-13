@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.net.URLEncoder;
 
 /**
  *
@@ -27,12 +29,19 @@ public class BookingActions extends HttpServlet {
             if ("updateStatus".equals(action)) {
                 String status = request.getParameter("status");
                 bookingDAO.updateBookingStatus(bookingId, status);
+                     HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Booking Updated Successfully");
+                String errorMessage = "Booking Updated Successfully";
+                response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             } else if ("delete".equals(action)) {
                 bookingDAO.deleteBooking(bookingId);
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Booking Deleted Successfully");
+                String errorMessage = "Booking Deleted Successfully";
+                response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             }
             
-            // Redirect back to the admin dashboard
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
+        
             
         } catch (Exception e) {
             response.getWriter().println("Error: " + e.getMessage());

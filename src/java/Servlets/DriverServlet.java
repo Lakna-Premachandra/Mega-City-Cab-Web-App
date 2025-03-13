@@ -2,6 +2,7 @@ package Servlets;
 
 import DAO.DriverDAO;
 import Models.Driver;
+import Models.Vehicle;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.URLEncoder;
 
 @WebServlet(name = "DriverServlet", urlPatterns = {"/DriverServlet"})
 public class DriverServlet extends HttpServlet {
@@ -16,56 +18,86 @@ public class DriverServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String action = request.getParameter("action");
-        
+
         try {
             DriverDAO driverDAO = new DriverDAO();
-            
+
             if ("delete".equals(action)) {
                 int driverId = Integer.parseInt(request.getParameter("id"));
                 driverDAO.deleteDriver(driverId);
-                
+
+//                HttpSession session = request.getSession();
+//                session.setAttribute("message", "Driver deleted successfully!");
                 HttpSession session = request.getSession();
-                session.setAttribute("message", "Driver deleted successfully!");
+                session.setAttribute("errorMessage", "Driver deleted successfully!");
+                String errorMessage = "Driver deleted successfully!";
+                response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             }
-            
+
             // Redirect back to the driver management page
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/driver.jsp");
-            
         } catch (Exception e) {
             HttpSession session = request.getSession();
             session.setAttribute("message", "Error: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/driver.jsp");
+            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String action = request.getParameter("action");
-        
+
         try {
             DriverDAO driverDAO = new DriverDAO();
-            
+
             if ("add".equals(action)) {
-                // Create a new Driver object
                 Driver driver = new Driver();
                 driver.setDriverName(request.getParameter("driverName"));
                 driver.setUsername(request.getParameter("username"));
                 driver.setPhoneNo(request.getParameter("phoneNo"));
                 driver.setEmail(request.getParameter("email"));
                 driver.setLicenseNumber(request.getParameter("licenseNumber"));
-                driver.setCarId(Integer.parseInt(request.getParameter("carID")));
                 driver.setPassword(request.getParameter("password"));
 
+                Vehicle car = new Vehicle();
+                car.setModel(request.getParameter("model"));
+                car.setPlateNumber(request.getParameter("plateNumber"));
+                car.setVehicleType(request.getParameter("vehicleType"));
+
+                DriverDAO driverDAO2 = new DriverDAO();
+                int driverId = driverDAO2.addDriverWithCar(driver, car);
                 
-                driverDAO.addDriver(driver);
+                if (driverId > 0) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("errorMessage", "Driver added successfully!");
+                    String errorMessage = "Driver added successfully!";
+                    response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
+                } else {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("errorMessage", "Failed to add driver!");
+                    response.sendRedirect("views/dashboard-layout/admin.jsp");
+                }
                 
-                HttpSession session = request.getSession();
-                session.setAttribute("message", "Driver added successfully!");
-            } else if ("update".equals(action)) {
+
+                // if (driverId > 0) {
+                //     HttpSession session = request.getSession();
+
+                //     session.setAttribute("errorMessage", "Driver added successfully!");
+                //     String errorMessage = "Driver added successfully!";
+                //     response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
+                // } else {
+                //     response.sendRedirect("views/dashboard-layout/admin.jsp?message=Failed to add driver");
+                //     HttpSession session = request.getSession();
+
+                //     session.setAttribute("errorMessage", "Driver added successfully!");
+                //     String errorMessage = "Driver added successfully!";
+                //     response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
+                // }
+            } //           } 
+            else if ("update".equals(action)) {
                 // Create a Driver object for updating
                 Driver driver = new Driver();
                 driver.setDriverId(Integer.parseInt(request.getParameter("driverID")));
@@ -74,21 +106,22 @@ public class DriverServlet extends HttpServlet {
                 driver.setEmail(request.getParameter("email"));
                 driver.setLicenseNumber(request.getParameter("licenseNumber"));
                 driver.setCarId(Integer.parseInt(request.getParameter("carID")));
-                
+
                 // Update the driver
                 driverDAO.updateDriver(driver);
-                
+
                 HttpSession session = request.getSession();
-                session.setAttribute("message", "Driver updated successfully!");
+                session.setAttribute("errorMessage", "Driver updated successfully!");
+                String errorMessage = "Driver updated successfully!";
+                response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             }
-            
+
             // Redirect back to the driver management page
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
-            
         } catch (Exception e) {
             HttpSession session = request.getSession();
             session.setAttribute("message", "Error: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
         }
     }
+
 }

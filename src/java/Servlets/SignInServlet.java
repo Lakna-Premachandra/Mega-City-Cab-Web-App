@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.URLEncoder;
 
 /**
  *
@@ -78,8 +79,15 @@ public class SignInServlet extends HttpServlet {
                 
             } else {
                 // Authentication failed
-                request.setAttribute("errorMessage", "Invalid username or password");
-                request.getRequestDispatcher("/views/auth-layout/sign-in/signIn.jsp").forward(request, response);
+//                request.setAttribute("errorMessage", "Invalid username or password");
+//                request.getRequestDispatcher("/views/auth-layout/sign-in/signIn.jsp").forward(request, response);
+  HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Invalid username or password.");
+            // Keep the username to improve user experience
+            session.setAttribute("lastUsername", username);
+            String errorMessage = "Invalid username or password.";
+            response.sendRedirect("views/auth-layout/sign-in/signIn.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
+                
             }
             
         } catch (Exception e) {

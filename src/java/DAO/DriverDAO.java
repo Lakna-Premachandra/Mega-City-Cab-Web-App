@@ -4,6 +4,7 @@
  */
 package DAO;
 import Models.Driver;
+import Models.Vehicle;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -236,4 +237,94 @@ public class DriverDAO {
             stmt.executeUpdate();
         }
     }
+        
+        public int addDriverWithCar(Driver driver, Vehicle car) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement userStmt = null;
+    PreparedStatement carStmt = null;
+    PreparedStatement driverStmt = null;
+    ResultSet userRs = null;
+    ResultSet carRs = null;
+    int driverId = -1;
+    
+    try {
+        conn = DBConnection.getConnection();
+        conn.setAutoCommit(false); // For transaction handling
+        
+        // Step 1: Insert User Data (authentication details)
+        String userSql = "INSERT INTO user_details (username, password, userType) VALUES (?, ?, 'Driver')";
+        userStmt = conn.prepareStatement(userSql, Statement.RETURN_GENERATED_KEYS);
+        userStmt.setString(1, driver.getUsername());
+        userStmt.setString(2, driver.getPassword());
+        userStmt.executeUpdate();
+        
+        // Get the auto-generated userID
+        userRs = userStmt.getGeneratedKeys();
+        int userId = 0;
+        if (userRs.next()) {
+            userId = userRs.getInt(1);
+        } else {
+            throw new SQLException("Creating user failed, no ID obtained.");
+        }
+        
+        // Step 2: Insert Car Data
+        String carSql = "INSERT INTO car_details (model, plate_number, vehicle_type, lisence_number, year) VALUES (?, ?, ?, ?, ?)";
+        carStmt = conn.prepareStatement(carSql, Statement.RETURN_GENERATED_KEYS);
+        carStmt.setString(1, car.getModel());
+        carStmt.setString(2, car.getPlateNumber());
+        carStmt.setString(3, car.getVehicleType());
+        carStmt.setString(4, car.getLicenseNumber());
+        carStmt.setInt(5, car.getYear());
+        carStmt.executeUpdate();
+        
+        // Get the auto-generated carID
+        carRs = carStmt.getGeneratedKeys();
+        int carId = 0;
+        if (carRs.next()) {
+            carId = carRs.getInt(1);
+        } else {
+            throw new SQLException("Creating car record failed, no ID obtained.");
+        }
+        
+        // Step 3: Insert Driver Data with the userID and carID
+        String driverSql = "INSERT INTO driver_details (userID, driverName, phoneNo, email, licenseNumber, carID) VALUES (?, ?, ?, ?, ?, ?)";
+        driverStmt = conn.prepareStatement(driverSql, Statement.RETURN_GENERATED_KEYS);
+        driverStmt.setInt(1, userId);
+        driverStmt.setString(2, driver.getDriverName());
+        driverStmt.setString(3, driver.getPhoneNo());
+        driverStmt.setString(4, driver.getEmail());
+        driverStmt.setString(5, driver.getLicenseNumber());
+        driverStmt.setInt(6, carId);
+        
+        int affectedRows = driverStmt.executeUpdate();
+        if (affectedRows > 0) {
+            ResultSet driverRs = driverStmt.getGeneratedKeys();
+            if (driverRs.next()) {
+                driverId = driverRs.getInt(1); // Get the driverID
+            }
+            driverRs.close();
+        }
+        
+        conn.commit(); // Commit the transaction
+        
+    } catch (SQLException ex) {
+        if (conn != null) {
+            try {
+                conn.rollback(); // Rollback on error
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        throw ex; // Re-throw exception after rollback
+    } finally {
+        if (userRs != null) try { userRs.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (carRs != null) try { carRs.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (userStmt != null) try { userStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (carStmt != null) try { carStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (driverStmt != null) try { driverStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+    }
+    
+    return driverId;
+}
 }

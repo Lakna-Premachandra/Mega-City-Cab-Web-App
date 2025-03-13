@@ -17,19 +17,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.URLEncoder;
+
 /**
  *
  * @author PC
  */
 
-
 @WebServlet("/SignUpServlet")
 public class SignUpServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
-    
+
     private UserDAO userDAO;
     private CustomerDAO customerDAO;
-    
+
     public SignUpServlet() {
         super();
         userDAO = new UserDAO();
@@ -46,22 +48,25 @@ public class SignUpServlet extends HttpServlet {
             String nic = request.getParameter("nic");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            
+
             // First check if username already exists
             if (userDAO.checkUsernameExists(username)) {
-                request.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
-                request.getRequestDispatcher("path/to/sign-up/signUp.jsp").forward(request, response);
+
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
+                String errorMessage = "Username already exists. Please choose a different username.";
+                response.sendRedirect("views/auth-layout/sign-up/signUp.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
                 return;
             }
-            
+
             // Create User object and add to database
             User user = new User();
             user.setUsername(username);
             user.setPassword(password); // In real application, you should hash the password
             user.setUserType("Customer");
-            
+
             int userId = userDAO.addUser(user);
-            
+
             if (userId > 0) {
                 // Create Customer object and add to database
                 Customer customer = new Customer();
@@ -71,9 +76,9 @@ public class SignUpServlet extends HttpServlet {
                 customer.setPhoneNo(phoneNumber);
                 customer.setEmail(email);
                 customer.setNIC(nic);
-                
+
                 int customerId = customerDAO.addCustomer(customer);
-                
+
                 if (customerId > 0) {
                     // Set success message and redirect to login page
                     HttpSession session = request.getSession();
@@ -89,7 +94,7 @@ public class SignUpServlet extends HttpServlet {
                 request.setAttribute("errorMessage", "Registration failed. Please try again.");
                 request.getRequestDispatcher("path/to/sign-up/signUp.jsp").forward(request, response);
             }
-            
+
         } catch (Exception e) {
             request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
             request.getRequestDispatcher("path/to/sign-up/signUp.jsp").forward(request, response);
