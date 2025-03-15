@@ -30,13 +30,12 @@ public class VehicleServlet extends HttpServlet {
                 session.setAttribute("message", "Vehicle deleted successfully!");
             }
             
-            // Redirect back to the vehicle management page
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
+            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
             
         } catch (Exception e) {
             HttpSession session = request.getSession();
             session.setAttribute("message", "Error: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
+            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
         }
     }
 
@@ -81,12 +80,12 @@ public class VehicleServlet extends HttpServlet {
             }
             
             // Redirect back to the vehicle management page
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
+            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
             
         } catch (Exception e) {
             HttpSession session = request.getSession();
             session.setAttribute("message", "Error: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
+            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
         }
     }
 }

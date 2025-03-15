@@ -292,24 +292,9 @@
                             </div>
                         </div>
 
-<!--                        <div class="checkbox-container">
-                            <input type="checkbox" id="remember" class="form-checkbox">
-                            <label for="remember">Keep me signed in</label>
-                            <a href="#" class="forgot-password">Reset password</a>
-                        </div>-->
-
-                           <!--<input type="submit" class="submit-button"value="submit"/>-->
-                            <button type="submit" class="submit-button">Sign In</button>
+                        <button type="submit" class="submit-button">Sign In</button>
 
                         <div class="divider"></div>
-
-<!--                        <a href="#" class="social-button facebook-button">
-                            Continue with Facebook
-                        </a>
-
-                        <a href="#" class="social-button google-button">
-                            Continue with Google
-                        </a>-->
 
                         <div class="signup-link">
                             Create your account? <a href="../sign-up/signUp.jsp">Sign Up</a>
@@ -343,7 +328,6 @@
                     errorMessage.style.display = 'block';
                 } else {
                     errorMessage.style.display = 'none';
-                    // Handle form submission here
                     console.log('Form submitted successfully');
                 }
             });

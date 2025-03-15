@@ -132,4 +132,33 @@ public void deleteBooking(int bookingId) throws SQLException, ClassNotFoundExcep
     }
 }
 
+public static List<Booking> getBookingsByCustomerID(int customerID) throws SQLException, ClassNotFoundException {
+    String query = "SELECT * FROM booking_details WHERE customerID = ? ORDER BY bookingDateTime DESC";
+    List<Booking> bookings = new ArrayList<>();
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setInt(1, customerID);
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            Booking booking = new Booking();
+            booking.setBookingID(rs.getInt("bookingID"));
+            booking.setCustomerID(rs.getInt("customerID"));
+            booking.setDriverID(rs.getInt("driverID"));
+            booking.setCarID(rs.getInt("carID"));
+            booking.setStartDestination(rs.getString("startDestination"));
+            booking.setEndDestination(rs.getString("endDestination"));
+            booking.setBookingDateTime(rs.getString("bookingDateTime"));
+            booking.setAmount(rs.getDouble("amount"));
+            booking.setStatus(rs.getString("status"));
+            
+            bookings.add(booking);
+        }
+    }
+    
+    return bookings;
 }
+}
+

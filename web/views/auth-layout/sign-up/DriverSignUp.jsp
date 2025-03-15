@@ -264,7 +264,7 @@
                         <button type="submit" class="submit-button">Sign Up</button>
 
                         <div class="signup-link">
-                            Already have an account? <a href="../sign-in/driverSignIn.jsp">Sign In</a>
+                            Already have an account? <a href="../sign-in/signIn.jsp">Sign In</a>
                         </div>
                     </form>
                 </div>

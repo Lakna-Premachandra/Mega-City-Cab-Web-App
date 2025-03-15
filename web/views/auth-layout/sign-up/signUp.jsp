@@ -259,14 +259,12 @@
                 let hasError = false;
                 const errorMessage = document.getElementById('errorMessage');
 
-                // Reset error messages
                 const errorElements = document.querySelectorAll('.input-error');
                 errorElements.forEach(element => {
                     element.style.display = 'none';
                     element.textContent = '';
                 });
 
-                // Validate Customer Name
                 const customerName = document.getElementById('customername').value.trim();
                 if (!customerName) {
                     document.getElementById('customernameError').textContent = 'Customer name is required';
@@ -274,7 +272,6 @@
                     hasError = true;
                 }
 
-                // Validate Phone Number
                 const phoneNumber = document.getElementById('phoneNumber').value.trim();
                 if (!phoneNumber) {
                     document.getElementById('phoneNumberError').textContent = 'Phone number is required';
@@ -286,7 +283,6 @@
                     hasError = true;
                 }
 
-                // Validate Address
                 const address = document.getElementById('address').value.trim();
                 if (!address) {
                     document.getElementById('addressError').textContent = 'Address is required';
@@ -294,7 +290,6 @@
                     hasError = true;
                 }
 
-                // Validate Email
                 const email = document.getElementById('email').value.trim();
                 if (!email) {
                     document.getElementById('emailError').textContent = 'Email is required';

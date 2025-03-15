@@ -33,6 +33,7 @@ public class BookingActions extends HttpServlet {
                 session.setAttribute("errorMessage", "Booking Updated Successfully");
                 String errorMessage = "Booking Updated Successfully";
                 response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
+                
             } else if ("delete".equals(action)) {
                 bookingDAO.deleteBooking(bookingId);
                 HttpSession session = request.getSession();
@@ -40,8 +41,6 @@ public class BookingActions extends HttpServlet {
                 String errorMessage = "Booking Deleted Successfully";
                 response.sendRedirect("views/dashboard-layout/admin.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             }
-            
-        
             
         } catch (Exception e) {
             response.getWriter().println("Error: " + e.getMessage());

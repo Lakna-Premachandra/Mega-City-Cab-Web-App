@@ -1,18 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="DAO.BookingDAO"%>
-<%@ page import="Models.Booking"%>
+<%-- 
+    Document   : driver-management.jsp
+    Created on : Mar 14, 2025, 12:03:43 AM
+    Author     : PC
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="DAO.DriverDAO"%>
+<%@ page import="Models.Driver"%>
+<%@ page import="DAO.VehicleDAO"%>
+<%@ page import="Models.Vehicle"%>
 <%@ page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Mega City Cab - Bookings Management</title>
+        <title>Mega City Cab - Driver Management</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
-        <style>
+         <style>
             * {
                 box-sizing: border-box;
                 margin: 0;
@@ -507,7 +515,6 @@
         </style>
     </head>
     <body>
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-logo">
                 <img src="../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab">
@@ -515,17 +522,15 @@
             </div>
 
             <ul class="sidebar-menu">
-                <li><a href="admin.jsp" class="active"><i class="fas fa-taxi"></i> <span>Bookings</span></a></li>
-                <li><a href="driver-management.jsp"><i class="fas fa-users"></i> <span>Drivers</span></a></li>
+                <li><a href="admin.jsp"><i class="fas fa-taxi"></i> <span>Bookings</span></a></li>
+                <li><a href="driver-management.jsp" class="active"><i class="fas fa-users"></i> <span>Drivers</span></a></li>
                 <li><a href="vehicle-management.jsp"><i class="fas fa-car"></i> <span>Vehicles</span></a></li>
             </ul>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Dashboard Header -->
             <div class="dashboard-header">
-                <h1>Bookings Management</h1>
+                <h1>Driver Management</h1>
                 <div class="admin-profile">
                     <div class="admin-info">
                         <a href="${pageContext.request.contextPath}/LogoutServlet" style="color: #6b7280; font-size: 16px;">
@@ -544,66 +549,53 @@
             
             <div class="data-card">
                 <div class="data-card-header">
-                    <h2>Booking Records</h2>
+                    <h2>Drivers Management</h2>
+                    <div class="data-card-buttons">
+                        <button class="btn btn-primary" onclick="openAddDriverModal()">Add New Driver</button>
+                    </div>
                 </div>
+
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Customer</th>
-                                <th>Date & Time</th>
-                                <th>Pickup Location</th>
-                                <th>Destination</th>
-                                <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>License No.</th>
+                                <th>Vehicle</th>
+                                <th>Plate No</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
                                 try {
-                                    BookingDAO bookingDAO = new BookingDAO();
-                                    List<Booking> bookingList = bookingDAO.getAllBookings();
+                                    DriverDAO driverDAO = new DriverDAO();
+                                    List<Driver> driverList = driverDAO.getAllDrivers();
 
-                                    for (Booking booking : bookingList) {
-                                        String statusClass = "";
-                                        if (booking.getStatus().equals("Completed")) {
-                                            statusClass = "status-completed";
-                                        } else if (booking.getStatus().equals("Pending")) {
-                                            statusClass = "status-pending";
-                                        } else if (booking.getStatus().equals("Approved")) {
-                                            statusClass = "status-approved";
-                                        } else if (booking.getStatus().equals("Cancelled")) {
-                                            statusClass = "status-cancelled";
-                                        }
+                                    for (Driver driver : driverList) {
                             %>
                             <tr>
-                                <td>#BK-<%= String.format("%03d", booking.getBookingID())%></td>
-                                <td><%= booking.getCustomerID()%></td>
-                                <td><%= booking.getBookingDateTime()%></td>
-                                <td><%= booking.getStartDestination()%></td>
-                                <td><%= booking.getEndDestination()%></td>
-                                <td><%= booking.getDriverID() == 0 ? "Unassigned" : booking.getDriverID()%></td>
-                                <td>$<%= String.format("%.2f", booking.getAmount())%></td>
-                                <td><span class="status-badge <%= statusClass%>"><%= booking.getStatus()%></span></td>
+                                <td><%= driver.getDriverId()%></td>
+                                <td><%= driver.getDriverName()%></td>
+                                <td><%= driver.getUsername()%></td>
+                                <td><%= driver.getPhoneNo()%></td>
+                                <td><%= driver.getEmail()%></td>
+                                <td><%= driver.getLicenseNumber()%></td>
+                                <td><%= driver.getVehicleType()%> </td>
+                                <td><%= driver.getPlateNumber()%></td>
                                 <td>
                                     <div class="table-actions">
-                                        <div class="status-dropdown">
-                                            <select style="padding:6px 5px;border-radius: 3px;border:1px solid gray;margin-right:4px" name="status" onchange="window.location.href = this.value;">
-                                                <option value="#">Select Status</option>
-                                                <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID()%>&status=Pending">Pending</option>
-                                                <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID()%>&status=Approved">Approved</option>
-                                                <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID()%>&status=Completed">Completed</option>
-                                                <option value="${pageContext.request.contextPath}/BookingActions?action=updateStatus&id=<%= booking.getBookingID()%>&status=Cancelled">Cancelled</option>
-                                            </select>
-                                        </div>
-
-                                        <a href="${pageContext.request.contextPath}/BookingActions?action=delete&id=<%= booking.getBookingID()%>" 
+                                        <a href="#" class="action-btn edit" 
+                                           onclick="openEditDriverModal(<%= driver.getDriverId()%>, '<%= driver.getDriverName()%>', '<%= driver.getUsername()%>', '<%= driver.getPhoneNo()%>', '<%= driver.getEmail()%>', '<%= driver.getLicenseNumber()%>', <%= driver.getCarId()%>)">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/DriverServlet?action=delete&id=<%= driver.getDriverId()%>" 
                                            class="action-btn delete" 
-                                           title="Delete Booking"
-                                           onclick="return confirm('Are you sure you want to delete this booking?');">
+                                           onclick="return confirm('Are you sure you want to delete this driver?');">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
@@ -612,13 +604,172 @@
                             <%
                                     }
                                 } catch (Exception e) {
-                                    out.println("<tr><td colspan='9'>Error retrieving booking data: " + e.getMessage() + "</td></tr>");
+                                    out.println("<tr><td colspan='8'>Error retrieving driver data: " + e.getMessage() + "</td></tr>");
                                 }
                             %>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <!-- Add Driver Modal -->
+            <div id="addDriverModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeAddDriverModal()">&times;</span>
+                    <h2>Add New Driver</h2>
+                    <form action="${pageContext.request.contextPath}/DriverServlet" method="post">
+                        <input type="hidden" name="action" value="add">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="driverName">Driver Name</label>
+                                <input type="text" id="driverName" name="driverName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneNo">Phone Number</label>
+                                <input type="text" id="phoneNo" name="phoneNo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="licenseNumber">License Number</label>
+                                <input type="text" id="licenseNumber" name="licenseNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="plateNumber">Plate Number</label>
+                                <input type="text" id="plateNumber" name="plateNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="model">Model</label>
+                                <input type="text" id="model" name="model" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="year">Year</label>
+                                <input type="number" id="year" name="year" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="vehicleType">Vehicle Type</label>
+                                <select id="vehicleType" name="vehicleType" required>
+                                    <option value="">Select Vehicle Type</option>
+                                    <option value="Economy">Economy</option>
+                                    <option value="Premium">Premium</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="Van">Van</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeAddDriverModal()">Cancel</button>
+                            <button type="submit" class="btn-primary">Add Driver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit Driver Modal -->
+            <div id="editDriverModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeEditDriverModal()">&times;</span>
+                    <h2>Edit Driver</h2>
+                    <form action="${pageContext.request.contextPath}/DriverServlet" method="post">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" id="editDriverID" name="driverID">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="editDriverName">Driver Name</label>
+                                <input type="text" id="editDriverName" name="driverName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUsername">Username</label>
+                                <input type="text" id="editUsername" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editPhoneNo">Phone Number</label>
+                                <input type="text" id="editPhoneNo" name="phoneNo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEmail">Email</label>
+                                <input type="email" id="editEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editLicenseNumber">License Number</label>
+                                <input type="text" id="editLicenseNumber" name="licenseNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editCarID">Assign Vehicle</label>
+                                <select id="editCarID" name="carID" required>
+                                    <option value="">Select Vehicle</option>
+                                    <%
+                                        try {
+                                            VehicleDAO vehicleDAO = new VehicleDAO();
+                                            List<Vehicle> allVehicles = vehicleDAO.getAllVehicles();
+
+                                            for (Vehicle vehicle : allVehicles) {
+                                    %>
+                                    <option value="<%= vehicle.getCarId()%>"><%= vehicle.getModel()%> (<%= vehicle.getPlateNumber()%>)</option>
+                                    <%
+                                            }
+                                        } catch (Exception e) {
+                                            out.println("<option value=''>Error loading vehicles</option>");
+                                        }
+                                    %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeEditDriverModal()">Cancel</button>
+                            <button type="submit" class="btn-primary">Update Driver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
+        <script>
+            var addDriverModal = document.getElementById("addDriverModal");
+            var editDriverModal = document.getElementById("editDriverModal");
+
+            function openAddDriverModal() {
+                addDriverModal.style.display = "block";
+            }
+
+            function closeAddDriverModal() {
+                addDriverModal.style.display = "none";
+            }
+
+            function openEditDriverModal(driverId, driverName, username, phoneNo, email, licenseNumber, carId) {
+                document.getElementById("editDriverID").value = driverId;
+                document.getElementById("editDriverName").value = driverName;
+                document.getElementById("editUsername").value = username;
+                document.getElementById("editPhoneNo").value = phoneNo;
+                document.getElementById("editEmail").value = email;
+                document.getElementById("editLicenseNumber").value = licenseNumber;
+                document.getElementById("editCarID").value = carId;
+
+                editDriverModal.style.display = "block";
+            }
+
+            function closeEditDriverModal() {
+                editDriverModal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == addDriverModal) {
+                    addDriverModal.style.display = "none";
+                }
+                if (event.target == editDriverModal) {
+                    editDriverModal.style.display = "none";
+                }
+            }
+        </script>
     </body>
 </html>

@@ -31,7 +31,6 @@ public class Customer {
         this.NIC = NIC;
     }
     
-    // Getters and Setters
     public int getCustomerId() {
         return customerId;
     }

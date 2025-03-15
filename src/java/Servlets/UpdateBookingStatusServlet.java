@@ -16,21 +16,15 @@ public class UpdateBookingStatusServlet extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-            // Get parameters from the form
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
             String status = request.getParameter("status");
             
-            // Update the booking status in the database
             BookingDAO.updateBookingStatusDriver(bookingId, status);
             
-            // Redirect back to the driver dashboard
             response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/driver.jsp");
             
         } catch (Exception e) {
-            // Log the error
             getServletContext().log("Error updating booking status", e);
-            
-            // Forward to an error page or handle the error appropriately
             request.setAttribute("errorMessage", "Failed to update booking status: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

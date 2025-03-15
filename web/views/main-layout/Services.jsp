@@ -1,3 +1,4 @@
+<%@ page import="Models.User"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -93,6 +94,27 @@
             #booknow a {
                 text-decoration: none;
                 color: white;
+                font-weight: 600;
+            }
+               #user-menu {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0 20px;
+                position: relative;
+            }
+
+            #user-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background-color: #ccc; 
+                margin-bottom: 5px;
+            }
+
+            #username span {
+                font-size: 14px;
+                color: #333;
                 font-weight: 600;
             }
 
@@ -595,16 +617,31 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     </head>
     <body>
-        <!-- Header Section -->
         <section id="header">
-            <a href="#" class="logo"><img width="60" src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
+             <a href="#" class="logo"><img width="60" src="./../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
             <div>
                 <ul id="navbar">
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a class="active" href="services.html">Services</a></li>
-                    <li><a href="../main-layout/helpPage.jsp">Help</a></li>
-                    <li><a href="account.html">My Account</a></li>
-                    <button id="booknow"><a class='booknow' href="contact.html">Contact Us</a></button>
+                    <li><a href="">Home</a></li>
+                    <li><a href="./views/main-layout/Services.jsp">Services</a></li>
+                    <li><a href="./views/main-layout/helpPage.jsp">Help</a></li>
+                    <% 
+            HttpSession userSession = request.getSession(false);
+            User user = (userSession != null) ? (User)userSession.getAttribute("user") : null;
+            
+           if(user == null) { 
+            %>
+                <button id="booknow"><a class='booknow' href="./views/auth-layout/sign-in/signIn.jsp">Sign In</a></button>
+            <% } else { %>
+                <button id="booknow"><a href="LogoutServlet">Log Out</a></button>
+                <a href="views/auth-layout/sign-up/DriverSignUp.jsp"></a>
+                <li id="user-menu">
+                    <i class="fa-solid fa-user" id="user-icon"></i>
+                    <div id="username">
+                        <span><%= user.getUsername() %></span> 
+                    </div>
+                </li>
+            <% } %>
+            
                 </ul>
             </div>
         </section>

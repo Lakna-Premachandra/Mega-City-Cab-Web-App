@@ -32,7 +32,6 @@ public class Vehicle {
         this.vehicleType = vehicleType;
     }
     
-    // Getters and Setters
     public int getCarId() {
         return carId;
     }

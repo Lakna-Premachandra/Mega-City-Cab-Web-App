@@ -181,7 +181,6 @@ public class DriverDAO {
             }
             
         } finally {
-            // Close resources
             if (rs != null) rs.close();
             if (stmt != null) stmt.close();
         }

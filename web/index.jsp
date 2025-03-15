@@ -610,11 +610,14 @@
                 <button id="booknow"><a class='booknow' href="./views/auth-layout/sign-in/signIn.jsp">Sign In</a></button>
             <% } else { %>
                 <button id="booknow"><a href="LogoutServlet">Log Out</a></button>
+                <a href="views/auth-layout/sign-up/DriverSignUp.jsp"></a>
                 <li id="user-menu">
+                    <a href="views/main-layout/customer-account.jsp">
                     <i class="fa-solid fa-user" id="user-icon"></i>
                     <div id="username">
                         <span><%= user.getUsername() %></span> 
                     </div>
+                    </a>
                 </li>
             <% } %>
             
@@ -623,6 +626,7 @@
         </section>
 
         <div class="hero-section">
+        
             <h1>BOOK YOUR RIDE NOW</h1>
             <p>Experience comfortable, safe and reliable transportation across the city with our professional drivers and well-maintained vehicles.</p>
             <div class="cta-buttons">
@@ -633,6 +637,10 @@
         
 <section class="booking-section">
     <div class="booking-container">
+<!--        
+             <div class="errorMessage_login_cred" id="errorMessage" style="color: green; margin-bottom: 15px; text-align: center;">
+                     Booking Success
+                    </div>-->
         <div class="booking-header">
             <h2>MAKE A RESERVATION</h2>
             <p>Fill in the details below to book your ride</p>
@@ -754,19 +762,19 @@
                 <div class="price-details">
                     <div class="price-row">
                         <span>Distance:</span>
-                        <span id="distance-value">0.00 km</span>
+                        <span id="distance-value">14.00 km</span>
                     </div>
                     <div class="price-row">
                         <span>Base Price:</span>
-                        <span id="base-price">Rs. 0.00</span>
+                        <span id="base-price">Rs.2400.00</span>
                     </div>
                     <div class="price-row">
                         <span>Distance Cost:</span>
-                        <span id="distance-cost">Rs. 0.00</span>
+                        <span id="distance-cost">Rs. 600.00</span>
                     </div>
                     <div class="price-row total">
                         <span>Total Price:</span>
-                        <span id="total-price">Rs. 0.00</span>
+                        <span id="total-price">Rs. 3000.00</span>
                     </div>
                 </div>
             </div>

@@ -40,7 +40,6 @@ public class Driver {
         this.address = address;
     }
     
-    // Getters and Setters
     public int getDriverId() {
         return driverId;
     }

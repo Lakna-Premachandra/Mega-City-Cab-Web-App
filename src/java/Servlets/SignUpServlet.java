@@ -40,7 +40,6 @@ public class SignUpServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Get parameters from form
             String customerName = request.getParameter("customername");
             String phoneNumber = request.getParameter("phoneNumber");
             String address = request.getParameter("address");
@@ -49,7 +48,6 @@ public class SignUpServlet extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
 
-            // First check if username already exists
             if (userDAO.checkUsernameExists(username)) {
 
                 HttpSession session = request.getSession();
@@ -59,16 +57,14 @@ public class SignUpServlet extends HttpServlet {
                 return;
             }
 
-            // Create User object and add to database
             User user = new User();
             user.setUsername(username);
-            user.setPassword(password); // In real application, you should hash the password
+            user.setPassword(password); 
             user.setUserType("Customer");
 
             int userId = userDAO.addUser(user);
 
             if (userId > 0) {
-                // Create Customer object and add to database
                 Customer customer = new Customer();
                 customer.setUserId(userId);
                 customer.setCustomerName(customerName);
@@ -80,12 +76,10 @@ public class SignUpServlet extends HttpServlet {
                 int customerId = customerDAO.addCustomer(customer);
 
                 if (customerId > 0) {
-                    // Set success message and redirect to login page
                     HttpSession session = request.getSession();
                     session.setAttribute("successMessage", "Registration successful. Please login.");
                     response.sendRedirect(request.getContextPath() + "/views/auth-layout/sign-in/signIn.jsp");
                 } else {
-                    // If customer creation failed, delete the user we just created
                     userDAO.deleteUser(userId);
                     request.setAttribute("errorMessage", "Registration failed. Please try again.");
                     request.getRequestDispatcher("path/to/sign-up/signUp.jsp").forward(request, response);

@@ -43,47 +43,35 @@ public class SignInServlet extends HttpServlet {
         boolean rememberMe = request.getParameter("remember") != null;
         
         try {
-            // Authenticate user
             User user = userDAO.authenticateUser(username, password);
             
             if (user != null) {
-                // Create session
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 
-                // Set session timeout (30 minutes by default)
                 if (rememberMe) {
-                    // If "Remember Me" is checked, extend session timeout (e.g., 7 days)
                     session.setMaxInactiveInterval(7 * 24 * 60 * 60);
                 }
                 
-                // Load additional user information based on user type
                 if ("customer".equalsIgnoreCase(user.getUserType())) {
                     Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
                     if (customer != null) {
                         session.setAttribute("customer", customer);
+                        session.setAttribute("customerID", customer.getCustomerId());
+        session.setAttribute("customerName", customer.getCustomerName());
                     }
-                    // Redirect to index.html for customers
                     response.sendRedirect(request.getContextPath() + "/index.html");
                 } else if ("driver".equalsIgnoreCase(user.getUserType())) {
-                    // For driver, you would need to load driver details
-                    // Redirect to index.html for drivers
                     response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/driver.jsp");
                 } else if ("admin".equalsIgnoreCase(user.getUserType())) {
-                    // Redirect to admin dashboard
                     response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");
                 } else {
-                    // Generic redirect to index.html if user type is not recognized
                     response.sendRedirect(request.getContextPath() + "/views/auth-layout/sign-in/signIn.jsp");
                 }
                 
             } else {
-                // Authentication failed
-//                request.setAttribute("errorMessage", "Invalid username or password");
-//                request.getRequestDispatcher("/views/auth-layout/sign-in/signIn.jsp").forward(request, response);
-  HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", "Invalid username or password.");
-            // Keep the username to improve user experience
+            HttpSession session = request.getSession();
+            session.setAttribute("errorMessage", "Invalid username or password.");
             session.setAttribute("lastUsername", username);
             String errorMessage = "Invalid username or password.";
             response.sendRedirect("views/auth-layout/sign-in/signIn.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
@@ -91,10 +79,7 @@ public class SignInServlet extends HttpServlet {
             }
             
         } catch (Exception e) {
-            // Log the exception
             getServletContext().log("Error in SignInServlet", e);
-            
-            // Send error message to the login page
             request.setAttribute("errorMessage", "An error occurred during login. Please try again.");
             request.getRequestDispatcher("/views/auth-layout/sign-in/signIn.jsp").forward(request, response);
         }

@@ -54,12 +54,7 @@ public class DriverSignUpServlet extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
 
-            // First check if username already exists
             if (userDAO.checkUsernameExists(username)) {
-//                request.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
-//                request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
-                
-                
                  HttpSession session = request.getSession();
                 session.setAttribute("errorMessage", "Username already exists. Please choose a different username.");
                 String errorMessage = "Username already exists. Please choose a different username.";
@@ -67,33 +62,33 @@ public class DriverSignUpServlet extends HttpServlet {
                 return;
             }
 
-            // Check if license number already exists
             if (driverDAO.checkLicenseExists(driverLicense)) {
-                request.setAttribute("errorMessage", "Driver license already registered. Please contact support if this is an error.");
-                request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Driver license already registered.");
+                String errorMessage = "Driver license already registered.";
+                response.sendRedirect("views/auth-layout/sign-up/DriverSignUp.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
                 return;
             }
 
-            // Check if plate number already exists
             if (carDAO.checkPlateNumberExists(vehicleRegNumber)) {
-                request.setAttribute("errorMessage", "Vehicle registration number already registered. Please contact support if this is an error.");
-                request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+                 HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Vehicle registration number already registered.");
+                String errorMessage = "Vehicle registration number already registered";
+                response.sendRedirect("views/auth-layout/sign-up/DriverSignUp.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
                 return;
             }
 
-            // Create User object and add to database
             User user = new User();
             user.setUsername(username);
-            user.setPassword(password); // In real application, you should hash the password
+            user.setPassword(password); 
             user.setUserType("Driver");
 
             int userId = userDAO.addUser(user);
 
             if (userId > 0) {
-                // Create Car object first
                 Vehicle car = new Vehicle();
-                car.setModel("Default"); // Can be updated in profile
-                car.setYear(Calendar.getInstance().get(Calendar.YEAR)); // Current year
+                car.setModel("Default"); 
+                car.setYear(Calendar.getInstance().get(Calendar.YEAR));
                 car.setPlateNumber(vehicleRegNumber);
                 car.setLicenseNumber(driverLicense);
                 car.setVehicleType(vehicleType);
@@ -101,7 +96,6 @@ public class DriverSignUpServlet extends HttpServlet {
                 int carId = carDAO.addCar(car);
 
                 if (carId > 0) {
-                    // Create Driver object and add to database
                     Driver driver = new Driver();
                     driver.setUserId(userId);
                     driver.setDriverName(fullName);
@@ -114,27 +108,28 @@ public class DriverSignUpServlet extends HttpServlet {
                     int driverId = driverDAO.addDriver(driver);
 
                     if (driverId > 0) {
-                        // Set success message and redirect to login page
                         HttpSession session = request.getSession();
                         session.setAttribute("successMessage", "Registration successful. Please login.");
                         response.sendRedirect(request.getContextPath() + "/views/auth-layout/sign-in/signIn.jsp");
 
                     } else {
-                        // If driver creation failed, delete the car and user we just created
                         carDAO.deleteCar(carId);
                         userDAO.deleteUser(userId);
-                        request.setAttribute("errorMessage", "Registration failed. Please try again.");
-                        request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+                                        
+                request.setAttribute("errorMessage", "Registration failed. Please try again.");
+                request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+     
                     }
                 } else {
-                    // If car creation failed, delete the user we just created
                     userDAO.deleteUser(userId);
                     request.setAttribute("errorMessage", "Vehicle registration failed. Please try again.");
                     request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+                    
                 }
             } else {
                 request.setAttribute("errorMessage", "Registration failed. Please try again.");
                 request.getRequestDispatcher("views/auth-layout/sign-up/DriverSignUp.jsp").forward(request, response);
+                
             }
 
         } catch (Exception e) {

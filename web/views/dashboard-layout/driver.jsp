@@ -465,7 +465,7 @@
          Sidebar 
         <div class="sidebar">
             <div class="sidebar-logo">
-                <img src="/api/placeholder/50/50" alt="Mega City Cab">
+                <img src="../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab">
                 <h2>Driver Panel</h2>
             </div>
             
