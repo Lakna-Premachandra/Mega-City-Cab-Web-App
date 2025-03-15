@@ -7,15 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import Models.Location;
 /**
  *
  * @author PC
  */
-
-
 @WebServlet("/index.html")
 public class GetLocationsServlet extends HttpServlet {
     
@@ -25,8 +22,8 @@ public class GetLocationsServlet extends HttpServlet {
         
         LocationDAO locationDAO = new LocationDAO();
         List<Location> locationsList = locationDAO.getAllLocations();
-        
         request.setAttribute("locationsList", locationsList);
+        
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }

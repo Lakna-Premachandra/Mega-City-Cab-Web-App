@@ -138,6 +138,28 @@
             font-size: 12px;
             color: #6b7280;
         }
+        
+                     #user-menu {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0 20px;
+                position: relative;
+            }
+
+            #user-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background-color: #ccc; 
+                margin-bottom: 5px;
+            }
+
+            #username span {
+                font-size: 14px;
+                color: #333;
+                font-weight: 600;
+            }
 
         /* Data Card Styles */
         .data-card {
@@ -437,7 +459,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="images/logo.png" alt="Mega City Cab Logo">
+            <a href="#" class="logo"><img width="60" src="./../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
             <h2>Mega City Cab</h2>
         </div>
         <ul class="sidebar-menu">
@@ -452,20 +474,22 @@
     <div class="main-content">
         <div class="dashboard-header">
             <h1>My Bookings</h1>
-            <div class="user-profile">
-                <img src="images/user-avatar.png" alt="User Avatar">
-                <div class="user-info">
-                    <h4><%= customerName %></h4>
-                    <p>Customer</p>
-                </div>
-            </div>
+           <li id="user-menu">
+                    <!--<a href="views/main-layout/customer-account.jsp">-->
+                    <i class="fa-solid fa-user" id="user-icon"></i>
+                    <div id="username">
+                        <h4><%= customerName %></h4>
+                    </div>
+                    </a>
+                </li>
         </div>
 
         <div class="data-card">
             <div class="data-card-header">
                 <h2>All Bookings</h2>
                 <div class="data-card-buttons">
-                    <a href="newBooking.jsp" class="btn btn-primary"><i class="fas fa-plus"></i> New Booking</a>
+                      <a href="<%=request.getContextPath()%>/index.jsp" class="btn btn-primary"> 
+                          <i class="fas fa-plus"></i> New Booking</a>
                 </div>
             </div>
             

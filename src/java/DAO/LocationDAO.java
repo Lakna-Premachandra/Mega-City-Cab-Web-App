@@ -45,4 +45,26 @@ public class LocationDAO {
         
         return locations;
     }
+    
+       public String getLocationNameById(String locationId) throws SQLException, ClassNotFoundException {
+        String locationName = "";
+        String query = "SELECT locationName FROM locations WHERE locationID = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setString(1, locationId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    locationName = rs.getString("locationName");
+                }
+            }
+        } catch (SQLException e) {
+//            LOGGER.log(Level.SEVERE, "Error retrieving location name for ID: " + locationId, e);
+            throw e;
+        }
+        
+        return locationName;
+    }
 }
