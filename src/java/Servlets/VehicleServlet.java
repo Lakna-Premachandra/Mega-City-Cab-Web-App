@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.URLEncoder;
 
 @WebServlet(name = "VehicleServlet", urlPatterns = {"/VehicleServlet"})
 public class VehicleServlet extends HttpServlet {
@@ -28,9 +29,15 @@ public class VehicleServlet extends HttpServlet {
                 
                 HttpSession session = request.getSession();
                 session.setAttribute("message", "Vehicle deleted successfully!");
+                
             }
             
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
+//            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
+            
+                 HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", "Vehicle deleted successfully!");
+                String errorMessage = "Vehicle deleted successfully!";
+                response.sendRedirect("views/dashboard-layout/vehicle-management.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             
         } catch (Exception e) {
             HttpSession session = request.getSession();
@@ -47,6 +54,7 @@ public class VehicleServlet extends HttpServlet {
         
         try {
             VehicleDAO vehicleDAO = new VehicleDAO();
+            String errorMessage = null;
             
             if ("add".equals(action)) {
                 // Create a new Vehicle object
@@ -61,7 +69,9 @@ public class VehicleServlet extends HttpServlet {
                 vehicleDAO.addVehicle(vehicle);
                 
                 HttpSession session = request.getSession();
-                session.setAttribute("message", "Vehicle added successfully!");
+                  session.setAttribute("errorMessage", "Vehicle added successfully!");
+                 errorMessage = "Vehicle added successfully!";
+           
             } else if ("update".equals(action)) {
                 // Create a Vehicle object for updating
                 Vehicle vehicle = new Vehicle();
@@ -76,11 +86,13 @@ public class VehicleServlet extends HttpServlet {
                 vehicleDAO.updateVehicle(vehicle);
                 
                 HttpSession session = request.getSession();
-                session.setAttribute("message", "Vehicle updated successfully!");
+                session.setAttribute("errorMessage", "Vehicle updated successfully!");
+                errorMessage = "Vehicle updated successfully!";
             }
             
             // Redirect back to the vehicle management page
-            response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/vehicle-management.jsp");
+                 HttpSession session = request.getSession();
+                response.sendRedirect("views/dashboard-layout/vehicle-management.jsp?errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
             
         } catch (Exception e) {
             HttpSession session = request.getSession();

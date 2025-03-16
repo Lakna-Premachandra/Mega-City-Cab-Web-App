@@ -475,6 +475,34 @@
                 background-color: #fee2e2;
                 color: #b91c1c;
             }
+            
+            .errorMessage_login_cred {
+                color: white;
+                background-color: green; 
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                animation: fadeIn 0.5s ease-in-out;
+              }
+
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(-10px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
 
             /* Animations */
             @keyframes fadeIn {
@@ -542,8 +570,8 @@
             </div>
 
             <% if (session.getAttribute("errorMessage") != null) {%>
-            <div class="errorMessage_login_cred" id="errorMessage" style="color: green; margin-bottom: 15px; text-align: center;">
-                <%= session.getAttribute("errorMessage")%>
+            <div class="errorMessage_login_cred" id="errorMessage">
+            <%= session.getAttribute("errorMessage")%>
             </div>
             <% session.removeAttribute("errorMessage"); %>
             <% }%>

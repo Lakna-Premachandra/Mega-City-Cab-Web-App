@@ -5,8 +5,10 @@
 package Servlets;
 
 import DAO.CustomerDAO;
+import DAO.DriverDAO;
 import DAO.UserDAO;
 import Models.Customer;
+import Models.Driver;
 import Models.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,11 +30,14 @@ public class SignInServlet extends HttpServlet {
     
     private UserDAO userDAO;
     private CustomerDAO customerDAO;
+    private DriverDAO driverDAO;
+
     
     public SignInServlet() {
         super();
         userDAO = new UserDAO();
         customerDAO = new CustomerDAO();
+        driverDAO = new DriverDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -62,6 +67,14 @@ public class SignInServlet extends HttpServlet {
                     }
                     response.sendRedirect(request.getContextPath() + "/index.html");
                 } else if ("driver".equalsIgnoreCase(user.getUserType())) {
+                    
+                    Driver driver = driverDAO.getDriverByUserId(user.getUserId());
+                    if (driver != null) {
+                        session.setAttribute("driver", driver);
+                        session.setAttribute("driverID", driver.getDriverId());
+        session.setAttribute("customerName", driver.getDriverName());
+                    }
+                    
                     response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/driver.jsp");
                 } else if ("admin".equalsIgnoreCase(user.getUserType())) {
                     response.sendRedirect(request.getContextPath() + "/views/dashboard-layout/admin.jsp");

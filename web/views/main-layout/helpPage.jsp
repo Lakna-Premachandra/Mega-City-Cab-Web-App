@@ -446,12 +446,12 @@
     </head>
     <body>
                <section id="header">
-                   <a href="#" class="logo"><img width="60" src="./../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
+                   <a href="../../" class="logo"><img width="60" src="./../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
             <div>
                 <ul id="navbar">
-                    <li><a href="">Home</a></li>
-                    <li><a href="./views/main-layout/Services.jsp">Services</a></li>
-                    <li><a href="./views/main-layout/helpPage.jsp">Help</a></li>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="./Services.jsp">Services</a></li>
+                    <li><a href="">Help</a></li>
                     <% 
             HttpSession userSession = request.getSession(false);
             User user = (userSession != null) ? (User)userSession.getAttribute("user") : null;
@@ -463,7 +463,7 @@
                 <button id="booknow"><a href="LogoutServlet">Log Out</a></button>
                 <a href="views/auth-layout/sign-up/DriverSignUp.jsp"></a>
                 <li id="user-menu">
-                    <i class="fa-solid fa-user" id="user-icon"></i>
+                  <i class="fas fa-user"></i>
                     <div id="username">
                         <span><%= user.getUsername() %></span> 
                     </div>
@@ -589,7 +589,7 @@
         <footer>
             <div class="footer-container">
                 <div class="footer-col">
-                    <img src="./assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab" width="60">
+                    <img src="/assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab" width="60">
                     <p>Mega City Cab provides reliable transportation services across the city, ensuring comfort and safety for all passengers.</p>
                     <div class="social-icons">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -619,8 +619,8 @@
 
                 <div class="footer-col">
                     <h4>Contact Info</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Lahore, Pakistan - 54840</p>
-                    <p><i class="fas fa-phone"></i> +92-321-4655990</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Colombo, Sri Lanka - 54840</p>
+                    <p><i class="fas fa-phone"></i> +94-24655990</p>
                     <p><i class="fas fa-envelope"></i> info@megacitycab.com</p>
                     <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
                 </div>

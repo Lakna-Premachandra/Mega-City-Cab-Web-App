@@ -497,14 +497,18 @@
                 <table id="bookingsTable">
                     <thead>
                         <tr>
-                            <th>Booking ID</th>
-                            <th>Date & Time</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Driver ID</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                                <th>Booking ID</th>
+                                <th>Customer Name</th>
+                                <th>Booking Date</th>
+                                <th>Booking Time</th>
+                                <th>Pickup Location</th>
+                                <th>Drop Location</th>
+                                <th>Mobile No</th>
+                                <th>Vehicle Type</th>
+                                <th>Address</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -524,10 +528,14 @@
                                         %>
                                         <tr>
                                             <td>#BK-<%= String.format("%03d", booking.getBookingID())%></td>
+                                            <td><%= booking.getCustomerName()%></td>
                                             <td><%= booking.getBookingDateTime()%></td>
-                                            <td><%= booking.getStartDestination()%></td>
-                                            <td><%= booking.getEndDestination()%></td>
-                                            <td><%= booking.getDriverID() == 0 ? "Unassigned" : booking.getDriverID()%></td>
+                                            <td><%= booking.getBookingTime()%></td>
+                                            <td><%= booking.getStartLocationName()%></td>
+                                            <td><%= booking.getEndLocationName()%></td>
+                                            <td><%= booking.getCustomerMobile()%></td>
+                                            <td><%= booking.getVehicleType()%></td>
+                                            <td><%= booking.getAddress()%></td>
                                             <td>$<%= String.format("%.2f", booking.getAmount())%></td>
                                             <td>
                                                 <span class="status-badge <%= booking.getStatus().toLowerCase() %>">

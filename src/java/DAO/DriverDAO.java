@@ -190,7 +190,7 @@ public class DriverDAO {
     
        public static List<Driver> getAllDrivers() throws SQLException, ClassNotFoundException {
         List<Driver> drivers = new ArrayList<>();
-        String query = "SELECT d.*, c.model, c.plate_number, c.vehicle_type, u.username " +
+        String query = "SELECT d.*, c.model, c.year, c.plate_number, c.vehicle_type, u.password, u.username " +
                       "FROM driver_details d " +
                       "JOIN car_details c ON d.carID = c.carID " +
                       "JOIN user_details u ON d.userID = u.userID";
@@ -201,18 +201,20 @@ public class DriverDAO {
             
             while (rs.next()) {
                 Driver driver = new Driver();
-                driver.setDriverId(rs.getInt("driverID"));
                 driver.setUserId(rs.getInt("userID"));
                 driver.setDriverName(rs.getString("driverName"));
                 driver.setPhoneNo(rs.getString("phoneNo"));
                 driver.setEmail(rs.getString("email"));
                 driver.setLicenseNumber(rs.getString("licenseNumber"));
                 driver.setCarId(rs.getInt("carID"));
-               driver.setCarModel(rs.getString("model"));
-               driver.setPlateNumber(rs.getString("plate_number"));
-               driver.setVehicleType(rs.getString("vehicle_type"));
-               driver.setUsername(rs.getString("username"));
-                
+                driver.setCarModel(rs.getString("model"));
+                driver.setPlateNumber(rs.getString("plate_number"));
+                driver.setVehicleType(rs.getString("vehicle_type"));
+                driver.setUsername(rs.getString("username"));
+                driver.setPassword(rs.getString("password"));
+                driver.setYear(rs.getInt("year"));
+                driver.setDriverId(rs.getInt("driverID"));
+
                 drivers.add(driver);
             }
         }
@@ -325,5 +327,81 @@ public class DriverDAO {
     }
     
     return driverId;
+}
+        
+        public void updateDriverWithUserAndCar(Driver driver, String username, String password) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement driverStmt = null;
+    PreparedStatement userStmt = null;
+    PreparedStatement carStmt = null;
+    
+    try {
+        conn = DBConnection.getConnection();
+        conn.setAutoCommit(false); // Start transaction
+        
+        // 1. Update driver details
+        String driverSql = "UPDATE driver_details SET driverName = ?, phoneNo = ?, email = ?, licenseNumber = ? WHERE driverID = ?";
+        driverStmt = conn.prepareStatement(driverSql);
+        driverStmt.setString(1, driver.getDriverName());
+        driverStmt.setString(2, driver.getPhoneNo());
+        driverStmt.setString(3, driver.getEmail());
+        driverStmt.setString(4, driver.getLicenseNumber());
+        driverStmt.setInt(5, driver.getDriverId());
+        driverStmt.executeUpdate();
+        
+        // 2. Update car details
+        String carSql = "UPDATE car_details SET model = ?, plate_number = ?, year = ?, vehicle_type = ? WHERE carID = ?";
+        carStmt = conn.prepareStatement(carSql);
+        carStmt.setString(1, driver.getCarModel());
+        carStmt.setString(2, driver.getPlateNumber());
+        carStmt.setInt(3, driver.getYear());
+        carStmt.setString(4, driver.getVehicleType());
+        carStmt.setInt(5, driver.getCarId());
+        carStmt.executeUpdate();
+        
+        // 3. Update user details if username or password provided
+        if (username != null && !username.trim().isEmpty()) {
+            String userSql = "UPDATE user_details SET username = ?";
+            
+            // If password is also provided, include it in the update
+            if (password != null && !password.trim().isEmpty()) {
+                userSql += ", password = ?";
+            }
+            
+            userSql += " WHERE userID = (SELECT userID FROM driver_details WHERE driverID = ?)";
+            
+            userStmt = conn.prepareStatement(userSql);
+            userStmt.setString(1, username);
+            
+            if (password != null && !password.trim().isEmpty()) {
+                userStmt.setString(2, password);
+                userStmt.setInt(3, driver.getDriverId());
+            } else {
+                userStmt.setInt(2, driver.getDriverId());
+            }
+            
+            userStmt.executeUpdate();
+        }
+        
+        conn.commit(); // Commit the transaction
+        
+    } catch (SQLException ex) {
+        if (conn != null) {
+            try {
+                conn.rollback(); // Rollback on error
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        throw ex;
+    } finally {
+        if (driverStmt != null) try { driverStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (carStmt != null) try { carStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (userStmt != null) try { userStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (conn != null) try { 
+            conn.setAutoCommit(true);
+            conn.close(); 
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
 }
 }

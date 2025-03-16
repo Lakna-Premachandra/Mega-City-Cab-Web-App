@@ -54,7 +54,7 @@ public class DriverServlet extends HttpServlet {
                 driver.setDriverName(request.getParameter("driverName"));
                 driver.setUsername(request.getParameter("username"));
                 driver.setPhoneNo(request.getParameter("phoneNo"));
-                driver.setEmail(request.getParameter("email"));
+                driver.setEmail(request.getParameter("email")); 
                 driver.setLicenseNumber(request.getParameter("licenseNumber"));
                 driver.setPassword(request.getParameter("password"));
 
@@ -62,6 +62,9 @@ public class DriverServlet extends HttpServlet {
                 car.setModel(request.getParameter("model"));
                 car.setPlateNumber(request.getParameter("plateNumber"));
                 car.setVehicleType(request.getParameter("vehicleType"));
+                car.setLicenseNumber(request.getParameter("licenseNumber"));
+                car.setYear(Integer.parseInt(request.getParameter("year")));
+
 
                 DriverDAO driverDAO2 = new DriverDAO();
                 int driverId = driverDAO2.addDriverWithCar(driver, car);
@@ -79,15 +82,27 @@ public class DriverServlet extends HttpServlet {
                 
             } 
             else if ("update".equals(action)) {
-                Driver driver = new Driver();
-                driver.setDriverId(Integer.parseInt(request.getParameter("driverID")));
-                driver.setDriverName(request.getParameter("driverName"));
-                driver.setPhoneNo(request.getParameter("phoneNo"));
-                driver.setEmail(request.getParameter("email"));
-                driver.setLicenseNumber(request.getParameter("licenseNumber"));
-                driver.setCarId(Integer.parseInt(request.getParameter("carID")));
+            Driver driver = new Driver();
+            driver.setDriverId(Integer.parseInt(request.getParameter("driverID")));
+            driver.setDriverName(request.getParameter("driverName"));
+            driver.setPhoneNo(request.getParameter("phoneNo"));
+            driver.setEmail(request.getParameter("email"));
+            driver.setLicenseNumber(request.getParameter("licenseNumber"));
+            driver.setCarId(Integer.parseInt(request.getParameter("carID")));
+            
+            // Car details
+            driver.setCarModel(request.getParameter("model"));
+            driver.setPlateNumber(request.getParameter("plateNumber"));
+            driver.setYear(Integer.parseInt(request.getParameter("year")));
+            driver.setVehicleType(request.getParameter("vehicleType"));
+            
+            // User credentials
+            String username = request.getParameter("username");
+            String password = request.getParameter("password"); // This might be null or empty if not changing password
+            
+            // Call the new method to update all related tables
+            driverDAO.updateDriverWithUserAndCar(driver, username, password);
 
-                driverDAO.updateDriver(driver);
 
                 HttpSession session = request.getSession();
                 session.setAttribute("errorMessage", "Driver updated successfully!");

@@ -618,12 +618,14 @@
     </head>
     <body>
         <section id="header">
-             <a href="#" class="logo"><img width="60" src="./../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
+             <a href="../../" class="logo"><img width="60" src="./../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab"></a>
             <div>
                 <ul id="navbar">
-                    <li><a href="">Home</a></li>
-                    <li><a href="./views/main-layout/Services.jsp">Services</a></li>
-                    <li><a href="./views/main-layout/helpPage.jsp">Help</a></li>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="">Services</a></li>
+                    <li><a href="../main-layout/helpPage.jsp">Help</a></li>
+                    
+                 
                     <% 
             HttpSession userSession = request.getSession(false);
             User user = (userSession != null) ? (User)userSession.getAttribute("user") : null;
@@ -635,7 +637,7 @@
                 <button id="booknow"><a href="LogoutServlet">Log Out</a></button>
                 <a href="views/auth-layout/sign-up/DriverSignUp.jsp"></a>
                 <li id="user-menu">
-                    <i class="fa-solid fa-user" id="user-icon"></i>
+                   <i class="fas fa-user"></i>
                     <div id="username">
                         <span><%= user.getUsername() %></span> 
                     </div>

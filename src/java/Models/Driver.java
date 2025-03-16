@@ -24,6 +24,8 @@ public class Driver {
     private String plateNumber;
     private String vehicleType;
     private String password;
+    private int year;
+
     
     public Driver() {
     }
@@ -122,6 +124,14 @@ public class Driver {
     
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+     public int getYear() {
+        return year;
+    }
+    
+    public void setYear(int year) {
+        this.year = year;
     }
     
     @Override

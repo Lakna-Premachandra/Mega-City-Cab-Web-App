@@ -7,31 +7,30 @@ package Models;
 public class Booking {
     private int bookingID;
     private int customerID;
-    private Integer driverID;  // Using Integer to allow null
-    private Integer carID;     // Using Integer to allow null
+    private Integer driverID;  
+    private Integer carID;     
     private String startDestination;
     private String endDestination;
-    private String startLocationName; // Added for location name
-    private String endLocationName;   // Added for location name
+    private String startLocationName; 
+    private String endLocationName;   
     private String bookingDateTime;
     private double amount;
     private String status;
     private String bookingTime;
 
     private String description;
-    private String address;    // Added for customer address
+    private String address;    
     private String customerName;
-    private String customerMobile; // Added for customer mobile
+    private String customerMobile; 
     private String driverName;
     private String carModel;
     private String carPlateNumber;
     private String vehicleType;
     
-    // Default constructor
+    
     public Booking() {
     }
     
-    // Getters and setters
     public int getBookingID() { return bookingID; }
     public void setBookingID(int bookingID) { this.bookingID = bookingID; }
     
@@ -91,4 +90,5 @@ public class Booking {
     
     public String getVehicleType() { return vehicleType; }
     public void setVehicleType(String vehicleType) { this.vehicleType = vehicleType; }
+
 }

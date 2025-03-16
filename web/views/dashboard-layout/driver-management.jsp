@@ -477,6 +477,34 @@
                 background-color: #fee2e2;
                 color: #b91c1c;
             }
+            
+            .errorMessage_login_cred {
+                color: white;
+                background-color: green; 
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                animation: fadeIn 0.5s ease-in-out;
+              }
+
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(-10px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
 
             /* Animations */
             @keyframes fadeIn {
@@ -533,7 +561,7 @@
                 <h1>Driver Management</h1>
                 <div class="admin-profile">
                     <div class="admin-info">
-                        <a href="${pageContext.request.contextPath}/LogoutServlet" style="color: #6b7280; font-size: 16px;">
+                        <a href="${pageContext.request.contextPath}/LogoutServlet"">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>
@@ -541,9 +569,9 @@
             </div>
 
             <% if (session.getAttribute("errorMessage") != null) {%>
-            <div class="errorMessage_login_cred" id="errorMessage" style="color: green; margin-bottom: 15px; text-align: center;">
-                <%= session.getAttribute("errorMessage")%>
-            </div>
+            <div class="errorMessage_login_cred" id="errorMessage">
+                    <%= session.getAttribute("errorMessage") %>
+                </div>
             <% session.removeAttribute("errorMessage"); %>
             <% }%>
             
@@ -562,11 +590,14 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Username</th>
+                                <th>Password</th>
                                 <th>Phone</th>
                                 <th>Email</th>
                                 <th>License No.</th>
-                                <th>Vehicle</th>
+                                <th>Vehicle Type</th>
                                 <th>Plate No</th>
+                                <th>Model</th>
+                                <th>Year</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -582,15 +613,18 @@
                                 <td><%= driver.getDriverId()%></td>
                                 <td><%= driver.getDriverName()%></td>
                                 <td><%= driver.getUsername()%></td>
+                                <td><%= driver.getPassword()%></td>
                                 <td><%= driver.getPhoneNo()%></td>
                                 <td><%= driver.getEmail()%></td>
                                 <td><%= driver.getLicenseNumber()%></td>
                                 <td><%= driver.getVehicleType()%> </td>
                                 <td><%= driver.getPlateNumber()%></td>
+                                <td><%= driver.getCarModel()%> </td>
+                                <td><%= driver.getYear()%> </td>
                                 <td>
                                     <div class="table-actions">
                                         <a href="#" class="action-btn edit" 
-                                           onclick="openEditDriverModal(<%= driver.getDriverId()%>, '<%= driver.getDriverName()%>', '<%= driver.getUsername()%>', '<%= driver.getPhoneNo()%>', '<%= driver.getEmail()%>', '<%= driver.getLicenseNumber()%>', <%= driver.getCarId()%>)">
+                                           onclick="openEditDriverModal(<%= driver.getDriverId()%>, '<%= driver.getDriverName()%>', '<%= driver.getUsername()%>', '<%= driver.getPassword()%>', '<%= driver.getPhoneNo()%>', '<%= driver.getEmail()%>', '<%= driver.getLicenseNumber()%>', <%= driver.getCarId()%>, '<%= driver.getVehicleType()%>', '<%= driver.getPlateNumber()%>','<%= driver.getCarModel()%>', <%= driver.getYear()%>)">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="${pageContext.request.contextPath}/DriverServlet?action=delete&id=<%= driver.getDriverId()%>" 
@@ -693,6 +727,10 @@
                                 <input type="text" id="editUsername" name="username" required>
                             </div>
                             <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="editPassword" name="password" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="editPhoneNo">Phone Number</label>
                                 <input type="text" id="editPhoneNo" name="phoneNo" required>
                             </div>
@@ -705,24 +743,30 @@
                                 <input type="text" id="editLicenseNumber" name="licenseNumber" required>
                             </div>
                             <div class="form-group">
-                                <label for="editCarID">Assign Vehicle</label>
-                                <select id="editCarID" name="carID" required>
-                                    <option value="">Select Vehicle</option>
-                                    <%
-                                        try {
-                                            VehicleDAO vehicleDAO = new VehicleDAO();
-                                            List<Vehicle> allVehicles = vehicleDAO.getAllVehicles();
-
-                                            for (Vehicle vehicle : allVehicles) {
-                                    %>
-                                    <option value="<%= vehicle.getCarId()%>"><%= vehicle.getModel()%> (<%= vehicle.getPlateNumber()%>)</option>
-                                    <%
-                                            }
-                                        } catch (Exception e) {
-                                            out.println("<option value=''>Error loading vehicles</option>");
-                                        }
-                                    %>
+                                <label for="editPlateNumber">Plate Number</label>
+                                <input type="text" id="editPlateNumber" name="plateNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editModel">Model</label>
+                                <input type="text" id="editModel" name="model" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editYear">Year</label>
+                                <input type="number" id="editYear" name="year" required>
+                            </div>
+                             
+                                <input type="hidden" id="editCarID" name="carID" required>
+                            <div class="form-group">
+                               <div class="form-group">
+                                <label for="editVehicleType">Vehicle Type</label>
+                                <select id="editVehicleType" name="vehicleType" required>
+                                    <option value="">Select Vehicle Type</option>
+                                    <option value="Economy">Economy</option>
+                                    <option value="Premium">Premium</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="Van">Van</option>
                                 </select>
+                            </div>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -745,18 +789,45 @@
             function closeAddDriverModal() {
                 addDriverModal.style.display = "none";
             }
+function openEditDriverModal(
+    driverId, 
+    driverName, 
+    username, 
+    password, 
+    phoneNo, 
+    email, 
+    licenseNumber, 
+    carID, 
+    vehicleType, 
+    plateNumber, 
+    model, 
+    year
+) {
+    // Bind values to the modal fields
+    document.getElementById("editDriverID").value = driverId;
+    document.getElementById("editDriverName").value = driverName;
+    document.getElementById("editUsername").value = username;
+    document.getElementById("editPassword").value = password;
+    document.getElementById("editPhoneNo").value = phoneNo;
+    document.getElementById("editEmail").value = email;
+    document.getElementById("editLicenseNumber").value = licenseNumber;
+    document.getElementById("editCarID").value = carID;
+    document.getElementById("editPlateNumber").value = plateNumber;
+    document.getElementById("editModel").value = model;
+    document.getElementById("editYear").value = year;
 
-            function openEditDriverModal(driverId, driverName, username, phoneNo, email, licenseNumber, carId) {
-                document.getElementById("editDriverID").value = driverId;
-                document.getElementById("editDriverName").value = driverName;
-                document.getElementById("editUsername").value = username;
-                document.getElementById("editPhoneNo").value = phoneNo;
-                document.getElementById("editEmail").value = email;
-                document.getElementById("editLicenseNumber").value = licenseNumber;
-                document.getElementById("editCarID").value = carId;
+    // Set the vehicle type dropdown
+    var typeSelect = document.getElementById("editVehicleType");
+    for (var i = 0; i < typeSelect.options.length; i++) {
+        if (typeSelect.options[i].value === vehicleType) {
+            typeSelect.selectedIndex = i;
+            break;
+        }
+    }
 
-                editDriverModal.style.display = "block";
-            }
+    // Display the modal
+    editDriverModal.style.display = "block";
+}
 
             function closeEditDriverModal() {
                 editDriverModal.style.display = "none";

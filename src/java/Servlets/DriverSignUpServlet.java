@@ -53,6 +53,8 @@ public class DriverSignUpServlet extends HttpServlet {
             String vehicleRegNumber = request.getParameter("vehicleRegNumber");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
+            String model = request.getParameter("model");
+            int year = Integer.parseInt(request.getParameter("year"));
 
             if (userDAO.checkUsernameExists(username)) {
                  HttpSession session = request.getSession();
@@ -87,8 +89,8 @@ public class DriverSignUpServlet extends HttpServlet {
 
             if (userId > 0) {
                 Vehicle car = new Vehicle();
-                car.setModel("Default"); 
-                car.setYear(Calendar.getInstance().get(Calendar.YEAR));
+                car.setModel(model); 
+                car.setYear(year);
                 car.setPlateNumber(vehicleRegNumber);
                 car.setLicenseNumber(driverLicense);
                 car.setVehicleType(vehicleType);

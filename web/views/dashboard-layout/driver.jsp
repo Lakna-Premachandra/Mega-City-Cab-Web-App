@@ -1,3 +1,4 @@
+<%@page import="Models.Driver"%>
 <%@page import="DAO.BookingDAO"%>
 <%@page import="Models.Booking"%>
 <%@page import="java.util.List"%>
@@ -462,7 +463,19 @@
         </style>
     </head>
     <body>
-         Sidebar 
+
+          <%
+        // Check if user is logged in
+        Driver driver = (Driver) session.getAttribute("driver");
+        if (driver == null) {
+            // Redirect to login page
+            response.sendRedirect(request.getContextPath() + "/views/auth-layout/sign-in/signIn.jsp");
+            return;
+        }
+        
+        int driverID = driver.getDriverId();
+        String driverName = driver.getDriverName();
+    %>
         <div class="sidebar">
             <div class="sidebar-logo">
                 <img src="../../assets/images/checkered-circle-taxi-frame_78370-3172.avif" alt="Mega City Cab">
@@ -471,35 +484,43 @@
             
             <ul class="sidebar-menu">
                 <li><a class="active"><i class="fas fa-taxi"></i> <span>My Bookings</span></a></li>
-                <li><a><i class="fas fa-user-cog"></i> <span>My Account</span></a></li>
+                <!--<li><a><i class="fas fa-user-cog"></i> <span>My Account</span></a></li>-->
             </ul>
         </div>
         
-         Main Content 
         <div class="main-content">
             <div class="dashboard-header">
                 <div class="header-left">
                     <h1>Driver Dashboard</h1>
-                    <div class="status-toggle">
+<!--                    <div class="status-toggle">
                         <span class="status-toggle-label">Status:</span>
                         <label class="status-toggle-switch">
                             <input type="checkbox" checked>
                             <span class="status-toggle-slider"></span>
                         </label>
                         <span class="status-toggle-text online">Online</span>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="driver-profile">
                     <div class="driver-info">
                         <!--<h4>David Chen</h4>-->
                         <a href="${pageContext.request.contextPath}/LogoutServlet" style="color: #6b7280; font-size: 12px;">
+                            <h4><%= driverName %></h4>
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
                     </div>
+<!--             <li id="user-menu">
+                    <a href="views/main-layout/customer-account.jsp">
+                    <i class="fa-solid fa-user" id="user-icon"></i>
+                    <div id="username">
+                        
+
+                    </div>
+                    
+                </li>-->
                 </div>
             </div>
             
-             Bookings Section 
             <div class="data-card">
                 <div class="data-card-header">
                     <h2>Available Bookings</h2>
@@ -510,11 +531,15 @@
                         <thead>
                             <tr>
                                 <th>Booking ID</th>
-                                <th>Customer</th>
-                                <th>Time</th>
+                                <th>Customer Name</th>
+                                <th>Booking Date</th>
+                                <th>Booking Time</th>
                                 <th>Pickup Location</th>
-                                <th>Destination</th>
-                                <th>Fare Estimate</th>
+                                <th>Drop Location</th>
+                                <th>Mobile No</th>
+                                <th>Vehicle Type</th>
+                                <th>Address</th>
+                                <th>Amount</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -527,12 +552,17 @@
                                         String status = booking.getStatus().toLowerCase();
                             %>
                                 <tr>
-                                    <td>#<%= booking.getBookingID() %></td>
-                                    <td><%= booking.getCustomerID() %></td>
-                                    <td><%= booking.getBookingDateTime() %></td>
-                                    <td><%= booking.getStartDestination() %></td>
-                                    <td><%= booking.getEndDestination() %></td>
-                                    <td>$<%= String.format("%.2f", booking.getAmount()) %></td>
+                                <td>#BK-<%= String.format("%03d", booking.getBookingID())%></td>
+                                <td><%= booking.getCustomerName()%></td>
+                                <td><%= booking.getBookingDateTime()%></td>
+                                <td><%= booking.getBookingTime()%></td>
+                                <td><%= booking.getStartLocationName()%></td>
+                                <td><%= booking.getEndLocationName()%></td>
+                                <td><%= booking.getCustomerMobile()%></td>
+                                <td><%= booking.getVehicleType()%></td>
+                                <td><%= booking.getAddress()%></td>
+                                <td>$<%= String.format("%.2f", booking.getAmount())%></td>
+                                <td>$<%= booking.getStatus()%></td>
                                     <td>
                                         <% 
                                             String statusClass = "";

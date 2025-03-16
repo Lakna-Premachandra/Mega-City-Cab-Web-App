@@ -19,7 +19,8 @@ public class BookingDAO {
     
     public static List<Booking> getAllBookings() throws SQLException, ClassNotFoundException {
         List<Booking> bookings = new ArrayList<>();
-        String query = "SELECT * FROM booking_details";
+        String query = "SELECT b.*, d.driverName FROM booking_details b " +
+                  "LEFT JOIN driver_details d ON b.driverID = d.driverID";
         
         try (Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -27,14 +28,19 @@ public class BookingDAO {
             while (rs.next()) {
                Booking booking = new Booking();
                booking.setBookingID(rs.getInt("bookingID"));
-               booking.setCustomerID(rs.getInt("customerID"));
+               booking.setCustomerName(rs.getString("customerName"));
                booking.setDriverID(rs.getInt("driverID"));
                booking.setCarID(rs.getInt("carID"));
-               booking.setStartDestination(rs.getString("startDestination"));
-               booking.setEndDestination(rs.getString("endDestination"));
+               booking.setStartLocationName(rs.getString("startLocationName"));
+               booking.setEndLocationName(rs.getString("endLocationName"));
                booking.setBookingDateTime(rs.getString("bookingDateTime"));
+               booking.setBookingTime(rs.getString("bookingTime"));
+               booking.setCustomerMobile(rs.getString("customerMobile"));
+               booking.setVehicleType(rs.getString("vehicleType"));
+               booking.setAddress(rs.getString("address"));
                booking.setAmount(rs.getDouble("amount"));
                booking.setStatus(rs.getString("status"));
+               booking.setDriverName(rs.getString("driverName"));
                 
                bookings.add(booking);
            }
@@ -144,15 +150,21 @@ public static List<Booking> getBookingsByCustomerID(int customerID) throws SQLEx
         
         while (rs.next()) {
             Booking booking = new Booking();
-            booking.setBookingID(rs.getInt("bookingID"));
-            booking.setCustomerID(rs.getInt("customerID"));
-            booking.setDriverID(rs.getInt("driverID"));
-            booking.setCarID(rs.getInt("carID"));
-            booking.setStartDestination(rs.getString("startDestination"));
-            booking.setEndDestination(rs.getString("endDestination"));
-            booking.setBookingDateTime(rs.getString("bookingDateTime"));
-            booking.setAmount(rs.getDouble("amount"));
-            booking.setStatus(rs.getString("status"));
+//            booking.setDriverID(rs.getInt("driverID"));
+            
+               booking.setBookingID(rs.getInt("bookingID"));
+               booking.setCustomerName(rs.getString("customerName"));
+               booking.setDriverID(rs.getInt("driverID"));
+               booking.setCarID(rs.getInt("carID"));
+               booking.setStartLocationName(rs.getString("startLocationName"));
+               booking.setEndLocationName(rs.getString("endLocationName"));
+               booking.setBookingDateTime(rs.getString("bookingDateTime"));
+               booking.setBookingTime(rs.getString("bookingTime"));
+               booking.setCustomerMobile(rs.getString("customerMobile"));
+               booking.setVehicleType(rs.getString("vehicleType"));
+               booking.setAddress(rs.getString("address"));
+               booking.setAmount(rs.getDouble("amount"));
+               booking.setStatus(rs.getString("status"));
             
             bookings.add(booking);
         }
@@ -208,49 +220,33 @@ public static List<Booking> getBookingsByCustomerID(int customerID) throws SQLEx
             if (generatedKeys != null) try { generatedKeys.close(); } catch (SQLException e) { /* ignored */ }
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { /* ignored */ }
             if (conn != null) try { conn.close(); } catch (SQLException e) { /* ignored */ }
-        }
-    
-    /**
-     * Updates the status of a booking
-     * @param bookingId The ID of the booking to update
-     * @param status The new status
-     * @return True if the operation was successful, false otherwise
-     */
-//    public boolean updateBookingStatus(int bookingId, String status) throws SQLException, ClassNotFoundException {
-//        String query = "UPDATE booking_details SET status = ? WHERE bookingID = ?";
-//        
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement stmt = conn.prepareStatement(query)) {
-//            
-//            stmt.setString(1, status);
-//            stmt.setInt(2, bookingId);
-//            
-//            int rowsAffected = stmt.executeUpdate();
-//            return rowsAffected > 0;
-//        }
-//    }
-//    
-    /**
-     * Assigns a driver and car to a booking
-     * @param bookingId The ID of the booking
-     * @param driverId The ID of the driver
-     * @param carId The ID of the car
-     * @return True if the operation was successful, false otherwise
-     */
-//    public boolean assignDriverAndCar(int bookingId, int driverId, int carId) throws SQLException, ClassNotFoundException {
-//        String query = "UPDATE booking_details SET driverID = ?, carID = ?, status = 'Assigned' WHERE bookingID = ?";
-//        
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement stmt = conn.prepareStatement(query)) {
-//            
-//            stmt.setInt(1, driverId);
-//            stmt.setInt(2, carId);
-//            stmt.setInt(3, bookingId);
-//            
-//            int rowsAffected = stmt.executeUpdate();
-//            return rowsAffected > 0;
-//        }
-//    
+        }  
  }
+ 
+public static void updateBookingWithDriver(int bookingId, int driverId, int carId, String status) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    
+    try {
+        conn = DBConnection.getConnection();
+        
+        // Log the parameters for debugging
+        System.out.println("Updating booking: " + bookingId + " with driver: " + driverId + ", car: " + carId + ", status: " + status);
+        
+        String sql = "UPDATE booking_details SET status = ?, driverID = ?, carID = ? WHERE bookingID = ?";
+        stmt = conn.prepareStatement(sql);
+        stmt.setString(1, status);
+        stmt.setInt(2, driverId);
+        stmt.setInt(3, carId);
+        stmt.setInt(4, bookingId);
+        
+        int rowsAffected = stmt.executeUpdate();
+        System.out.println("Rows affected: " + rowsAffected);
+        
+    } finally {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+    }
+}
 }
 

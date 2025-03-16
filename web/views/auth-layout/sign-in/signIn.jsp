@@ -239,6 +239,35 @@
             .signup-link a:hover {
                 text-decoration: underline;
             }
+            
+            .errorMessage_login_cred {
+                color: white;
+                background-color: #e74c3c; 
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                animation: fadeIn 0.5s ease-in-out;
+              }
+
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(-10px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+
 
             @media (max-width: 768px) {
                 .main-container {
@@ -266,7 +295,7 @@
             <div class="form-container">
                 <div class="form-content">
                         <% if (session.getAttribute("errorMessage") != null) { %>
-                <div class="errorMessage_login_cred" id="errorMessage" style="color: red; margin-bottom: 15px; text-align: center;">
+                <div class="errorMessage_login_cred" id="errorMessage">
                     <%= session.getAttribute("errorMessage") %>
                 </div>
                 <% session.removeAttribute("errorMessage"); %>

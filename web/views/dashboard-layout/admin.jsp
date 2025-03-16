@@ -469,6 +469,34 @@
                 background-color: #fee2e2;
                 color: #b91c1c;
             }
+            
+            .errorMessage_login_cred {
+                color: white;
+                background-color: green; 
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                animation: fadeIn 0.5s ease-in-out;
+              }
+
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(-10px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
 
             /* Animations */
             @keyframes fadeIn {
@@ -536,7 +564,7 @@
             </div>
 
             <% if (session.getAttribute("errorMessage") != null) {%>
-            <div class="errorMessage_login_cred" id="errorMessage" style="color: green; margin-bottom: 15px; text-align: center;">
+            <div class="errorMessage_login_cred" id="errorMessage">
                 <%= session.getAttribute("errorMessage")%>
             </div>
             <% session.removeAttribute("errorMessage"); %>
@@ -550,12 +578,16 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Customer</th>
-                                <th>Date & Time</th>
+                                <th>Booking ID</th>
+                                <th>Customer Name</th>
+                                <th>Booking Date</th>
+                                <th>Booking Time</th>
                                 <th>Pickup Location</th>
-                                <th>Destination</th>
+                                <th>Drop Location</th>
+                                <th>Mobile No</th>
                                 <th>Driver</th>
+                                <th>Vehicle Type</th>
+                                <th>Address</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -581,11 +613,15 @@
                             %>
                             <tr>
                                 <td>#BK-<%= String.format("%03d", booking.getBookingID())%></td>
-                                <td><%= booking.getCustomerID()%></td>
+                                <td><%= booking.getCustomerName()%></td>
                                 <td><%= booking.getBookingDateTime()%></td>
-                                <td><%= booking.getStartDestination()%></td>
-                                <td><%= booking.getEndDestination()%></td>
-                                <td><%= booking.getDriverID() == 0 ? "Unassigned" : booking.getDriverID()%></td>
+                                <td><%= booking.getBookingTime()%></td>
+                                <td><%= booking.getStartLocationName()%></td>
+                                <td><%= booking.getEndLocationName()%></td>
+                                <td><%= booking.getCustomerMobile()%></td>
+                                <td><%= booking.getDriverID() == 0 ? "Unassigned" : booking.getDriverName()%></td>
+                                <td><%= booking.getVehicleType()%></td>
+                                <td><%= booking.getAddress()%></td>
                                 <td>$<%= String.format("%.2f", booking.getAmount())%></td>
                                 <td><span class="status-badge <%= statusClass%>"><%= booking.getStatus()%></span></td>
                                 <td>
